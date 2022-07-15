@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">HA</string>
+    <string name="tab_home">Home</string>
+    <string name="tab_map">Mappa</string>
+    <string name="tab_myplaces">I miei posti</string>
+    <string name="done_text">Fatto</string>
+</resources>
