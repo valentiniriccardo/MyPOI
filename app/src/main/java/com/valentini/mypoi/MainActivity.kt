@@ -1,15 +1,14 @@
-package com.valentini.mypoi
+package com.example.ha
 
 import android.os.Bundle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.tabs.TabLayout
-import androidx.viewpager.widget.ViewPager
+import android.provider.BaseColumns
 import androidx.appcompat.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
-import com.valentini.mypoi.ui.main.SectionsPagerAdapter
-import com.valentini.mypoi.databinding.ActivityMainBinding
+import androidx.viewpager.widget.ViewPager
+import com.example.ha.databinding.ActivityMainBinding
+import com.example.ha.ui.main.SectionsPagerAdapter
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.tabs.TabLayout
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,11 +25,25 @@ class MainActivity : AppCompatActivity() {
         viewPager.adapter = sectionsPagerAdapter
         val tabs: TabLayout = binding.tabs
         tabs.setupWithViewPager(viewPager)
+
+
         val fab: FloatingActionButton = binding.fab
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        fab.setOnClickListener {
+            goToMapTab() //Se clicco sull'icona vado alle mappe
+        }
+    }
+
+    private fun goToMapTab() {
+        this@MainActivity.binding.tabs.getTabAt(1)?.select()
+    }
+
+    object FeedReaderContract {
+        // Table contents are grouped together in an anonymous object.
+        object FeedEntry : BaseColumns {
+            const val TABLE_NAME = "entry"
+            const val COLUMN_NAME_TITLE = "title"
+            const val COLUMN_NAME_SUBTITLE = "subtitle"
         }
     }
 }
