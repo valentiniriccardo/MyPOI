@@ -9,10 +9,18 @@
         <item name="colorSecondary">@color/teal_700</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="tabSelectedTextColor">@color/white</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">#009688</item>
+        <item name="tabTextColor">@color/light_gray</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="Theme.MYPOI.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <style name="tab_text" parent="@android:style/TextAppearance.Widget.TabWidget">
         <item name="android:fontFamily">@font/inter_bold</item>
     </style>
