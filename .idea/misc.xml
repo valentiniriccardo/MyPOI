@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3185" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/font/inter_bold.xml" value="0.5848958333333333" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/layout/activity_main.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/layout/custom_dialog.xml" value="0.5546875" />
@@ -12,6 +13,7 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/layout/map_fragment.xml" value="0.4466666666666667" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/layout/myplaces_fragment.xml" value="0.5546875" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/layout/new_myplaces_fragment.xml" value="0.5546875" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.176" />
       </map>
     </option>
   </component>
