@@ -1,4 +1,4 @@
-package com.example.ha.ui.main
+package com.valentini.mypoi.ui.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

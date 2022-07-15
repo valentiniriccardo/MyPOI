@@ -1,13 +1,12 @@
-package com.example.ha
+package com.valentini.mypoi
 
 import android.os.Bundle
 import android.provider.BaseColumns
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
-import com.example.ha.databinding.ActivityMainBinding
-import com.example.ha.ui.main.SectionsPagerAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
+import com.valentini.mypoi.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
