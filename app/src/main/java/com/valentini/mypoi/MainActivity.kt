@@ -7,6 +7,7 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.valentini.mypoi.databinding.ActivityMainBinding
+import com.valentini.mypoi.ui.main.SectionsPagerAdapter
 
 
 class MainActivity : AppCompatActivity() {

@@ -24,6 +24,9 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.valentini.mypoi.R
+import com.valentini.mypoi.databinding.MapFragmentBinding
+import com.valentini.mypoi.databinding.MyplacesFragmentBinding
 import java.util.*
 
 
