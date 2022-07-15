@@ -2,14 +2,12 @@ package com.valentini.mypoi.ui.main
 
 import android.Manifest
 import android.app.AlertDialog
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,7 +35,7 @@ class MapFragment : OnMapReadyCallback, Fragment() {
 
     private lateinit var pageViewModel: PageViewModel
     private var _binding: MapFragmentBinding? = null
-    private var _myplacesbinding : MyplacesFragmentBinding? = null
+    private var _myplacesbinding: MyplacesFragmentBinding? = null
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var currentMarker: Marker? = null
 
@@ -59,7 +57,7 @@ class MapFragment : OnMapReadyCallback, Fragment() {
     ): View {
         _binding = MapFragmentBinding.inflate(inflater, container, false)
         _binding!!.gotoFab.hide()
-            Toast.makeText(requireContext(), "Sto creando!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "Sto creando!", Toast.LENGTH_SHORT).show()
         val mapFragment =
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment? //IMPORTANTE CHE SIA CHILD E NON PARENT
         mapFragment?.getMapAsync(this@MapFragment)
@@ -137,7 +135,8 @@ class MapFragment : OnMapReadyCallback, Fragment() {
             currentMarker = marker
             _binding!!.gotoFab.show()
             val markerName = marker.title
-            Toast.makeText(requireContext(), "Clicked location is $markerName", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Clicked location is $markerName", Toast.LENGTH_SHORT)
+                .show()
             false
         }
 
@@ -147,7 +146,8 @@ class MapFragment : OnMapReadyCallback, Fragment() {
         this.googleMap.uiSettings.isMyLocationButtonEnabled = false
         this.googleMap.uiSettings.isIndoorLevelPickerEnabled = true
         this.googleMap.uiSettings.isMapToolbarEnabled = false
-        this.googleMap.setOnMapClickListener { point -> inserisciPunto(point)
+        this.googleMap.setOnMapClickListener { point ->
+            inserisciPunto(point)
             currentMarker = null
             _binding!!.gotoFab.hide()
             Toast.makeText(requireContext(), "Cliccato sulla mappa", Toast.LENGTH_SHORT).show()
@@ -181,12 +181,19 @@ class MapFragment : OnMapReadyCallback, Fragment() {
             // AlertDialog to the Activity
             val editText = customLayout.findViewById<EditText>(R.id.editText)
             sendDialogDataToActivity(editText.text.toString())
-            if (editText.text.isNotEmpty())
-            {
-                val marker = MarkerOptions().position(LatLng(point.latitude, point.longitude)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
+            if (editText.text.isNotEmpty()) {
+                val marker = MarkerOptions().position(LatLng(point.latitude, point.longitude))
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
                     .title(editText.text.toString()).snippet("we")
                 googleMap.addMarker(marker)
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(marker.position.latitude,marker.position.longitude), 16.0f), 1500, null)
+                googleMap.animateCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        LatLng(
+                            marker.position.latitude,
+                            marker.position.longitude
+                        ), 16.0f
+                    ), 1500, null
+                )
             }
         }
 
@@ -244,16 +251,23 @@ class MapFragment : OnMapReadyCallback, Fragment() {
         }
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location ->
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude,location.longitude), 16.0f), 1500, null)
+                googleMap.animateCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        LatLng(
+                            location.latitude,
+                            location.longitude
+                        ), 16.0f
+                    ), 1500, null
+                )
             }
 
-            //MarkerOptions().position(LatLng(ll.latitude, location.longitude)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
-            //    .title("Io").snippet("we")
-            //googleMap.addMarker(marker)
+        //MarkerOptions().position(LatLng(ll.latitude, location.longitude)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
+        //    .title("Io").snippet("we")
+        //googleMap.addMarker(marker)
 
     }
 
-    private fun getMeToMarker(marker : Marker) {
+    private fun getMeToMarker(marker: Marker) {
 
         val uri: String = java.lang.String.format(
             Locale.ENGLISH,
