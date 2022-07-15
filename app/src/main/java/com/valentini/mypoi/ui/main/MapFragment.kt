@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
@@ -102,11 +103,17 @@ class MapFragment : OnMapReadyCallback, Fragment() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         this.googleMap = googleMap
-        val success =
-            googleMap.setMapStyle(MapStyleOptions(resources.getString(R.string.style_json)))
-        if (!success) {
-            Log.e(TAG, "Style parsing failed.");
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        when (currentNightMode) {
+            Configuration.UI_MODE_NIGHT_NO -> {
+
+            } // Night mode is not active, we're using the light theme
+            Configuration.UI_MODE_NIGHT_YES -> {
+                googleMap.setMapStyle(MapStyleOptions(resources.getString(R.string.style_json_dark)))
+            } // Night mode is active, we're using dark theme
         }
+        //val success = googleMap.setMapStyle(MapStyleOptions(resources.getString(R.string.style_json_dark)))
+
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -179,6 +186,7 @@ class MapFragment : OnMapReadyCallback, Fragment() {
                 val marker = MarkerOptions().position(LatLng(point.latitude, point.longitude)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
                     .title(editText.text.toString()).snippet("we")
                 googleMap.addMarker(marker)
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(marker.position.latitude,marker.position.longitude), 16.0f), 1500, null)
             }
         }
 
