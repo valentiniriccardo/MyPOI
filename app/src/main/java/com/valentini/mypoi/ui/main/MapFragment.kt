@@ -50,11 +50,7 @@ class MapFragment : OnMapReadyCallback, Fragment() {
 
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = MapFragmentBinding.inflate(inflater, container, false)
         _binding!!.gotoFab.hide()
         Toast.makeText(requireContext(), "Sto creando!", Toast.LENGTH_SHORT).show()
@@ -62,10 +58,8 @@ class MapFragment : OnMapReadyCallback, Fragment() {
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment? //IMPORTANTE CHE SIA CHILD E NON PARENT
         mapFragment?.getMapAsync(this@MapFragment)
         _binding!!.gpsFab.setOnClickListener {
-            getMyPosition() //Se clicco sull'icona vado alle mappe
+            getMyPosition(16.0f) //Se clicco sull'icona vado alle mappe
         }
-
-
 
         return binding.root
     }
@@ -92,17 +86,11 @@ class MapFragment : OnMapReadyCallback, Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     override fun onMapReady(googleMap: GoogleMap) {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         this.googleMap = googleMap
-        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        when (currentNightMode) {
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_NO -> {
 
             } // Night mode is not active, we're using the light theme
@@ -159,10 +147,12 @@ class MapFragment : OnMapReadyCallback, Fragment() {
         //Toast.makeText(this@MapFragment.context, "Ciaaooo pronto!", Toast.LENGTH_SHORT).show()
         //googleMap.mapType = GoogleMap.MAP_TYPE_TERRAIN
         //TEST
-        val como = LatLng(45.808060, 9.085176)
+
+        getMyPosition(13.0f)
+        /*val como = LatLng(45.808060, 9.085176)
         googleMap.moveCamera(CameraUpdateFactory.zoomTo(12.0f))
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(como))
-
+        */
 
     }
 
@@ -192,7 +182,7 @@ class MapFragment : OnMapReadyCallback, Fragment() {
                             marker.position.latitude,
                             marker.position.longitude
                         ), 16.0f
-                    ), 1500, null
+                    ), 2000, null
                 )
             }
         }
@@ -205,35 +195,9 @@ class MapFragment : OnMapReadyCallback, Fragment() {
         dialog.setCancelable(false)
         dialog.show()
 
-        /*val alert: AlertDialog.Builder = AlertDialog.Builder(this.requireContext())
-
-        alert.setTitle("Nuovo posto")
-        alert.setMessage("Inserisci un nome per il posto")
-
-        val input = EditText(this.requireContext())
-        input.includeFontPadding = true
-        input.typeface = Typeface.DEFAULT_BOLD
-        var nomeBuca: String
-        alert.setView(input)
-        alert.setCancelable(false)
-        alert.setPositiveButton("Fatto") { dialog, whichButton ->
-            val value: Editable? = input.text
-            nomeBuca = value.toString()
-            if (nomeBuca != "") {
-                val marker = MarkerOptions().position(LatLng(point.latitude, point.longitude))
-                    .title(nomeBuca).snippet("we")
-                googleMap.addMarker(marker)
-            }
-        }
-        alert.setNegativeButton("Annulla",
-            DialogInterface.OnClickListener { dialog, whichButton ->
-                // Canceled.
-            })
-        alert.show()*/
-
     }
 
-    private fun getMyPosition() {
+    private fun getMyPosition(zoom: Float) {
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -256,8 +220,8 @@ class MapFragment : OnMapReadyCallback, Fragment() {
                         LatLng(
                             location.latitude,
                             location.longitude
-                        ), 16.0f
-                    ), 1500, null
+                        ), zoom
+                    ), 2000, null
                 )
             }
 

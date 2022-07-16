@@ -4,4 +4,5 @@
     <string name="tab_map">Mappa</string>
     <string name="tab_myplaces">I miei posti</string>
     <string name="done_text">Fatto</string>
+    <string name="fabContentDescription">Fab aggiunta posizione</string>
 </resources>

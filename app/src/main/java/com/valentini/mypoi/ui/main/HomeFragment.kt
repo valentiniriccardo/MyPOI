@@ -14,12 +14,9 @@ import com.valentini.mypoi.databinding.HomeFragmentBinding
 class HomeFragment : Fragment() {
 
     private lateinit var pageViewModel: PageViewModel
-    private var _placeholder_binding: HomeFragmentBinding? = null
-    var tab = ARG_SECTION_NUMBER
+    private var homeFragmentBinding: HomeFragmentBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _placeholder_binding!!
+    private val binding get() = homeFragmentBinding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +30,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _placeholder_binding = HomeFragmentBinding.inflate(inflater, container, false)
+        homeFragmentBinding = HomeFragmentBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -61,6 +58,6 @@ class HomeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _placeholder_binding = null
+        homeFragmentBinding = null
     }
 }

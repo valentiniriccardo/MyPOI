@@ -13,33 +13,23 @@ private val TAB_TITLES = arrayOf(
     R.string.tab_myplaces,
 )
 
-/**
- * A [FragmentPagerAdapter] that returns a fragment corresponding to
- * one of the sections/tabs/pages.
- */
-class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
-    FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getItem(position: Int): Fragment {
-        when (position) {
+        return when (position) {
             0 -> {
-                //Toast.makeText(context, "Sezione 1", Toast.LENGTH_SHORT).show()
-                return HomeFragment.newInstance(position + 1) //+1 perché il tab fa 0,1,2,3...
+                HomeFragment.newInstance(position + 1) //+1 perché il tab fa 0,1,2,3...
             }
             1 -> {
-                //Toast.makeText(context, "Sezione 2", Toast.LENGTH_SHORT).show()
-                return MapFragment.newInstance(position + 1) //+1 perché il tab fa 0,1,2,3...
+                MapFragment.newInstance(position + 1)
             }
             2 -> {
-                //Toast.makeText(context, "Sezione 3", Toast.LENGTH_SHORT).show()
-                return MyPlacesFragment.newInstance(position + 1)
+                MyPlacesFragment.newInstance(position + 1)
             }
             else -> {
-                throw RuntimeException("Tab non esistente")
+                throw RuntimeException("Tab non esistente") //Eventualita' impossibile
             }
         }
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a MyPlacesFragment (defined as a static inner class below).
     }
 
     override fun getPageTitle(position: Int): CharSequence {
