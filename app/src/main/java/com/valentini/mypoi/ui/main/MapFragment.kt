@@ -9,10 +9,13 @@ import android.content.res.Configuration
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.NumberPicker
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -57,12 +60,44 @@ class MapFragment : OnMapReadyCallback, Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         mapFragmentBinding = MapFragmentBinding.inflate(inflater, container, false)
         mapFragmentBinding!!.gotoFab.hide()
+
+
         Toast.makeText(requireContext(), "Sto creando!", Toast.LENGTH_SHORT).show()
         val mapFragment =
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment? //IMPORTANTE CHE SIA CHILD E NON PARENT
         mapFragment?.getMapAsync(this@MapFragment)
+
         mapFragmentBinding!!.gpsFab.setOnClickListener {
-            getMyPosition(16.0f) //Se clicco sull'icona vado alle mappe
+        //Se clicco sull'icona vado alle mappe
+            if (ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+            }
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                location?.let {
+                    googleMap.animateCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            LatLng(
+                                location.latitude,
+                                location.longitude
+                            ), 16.0f
+                        ), 2000, null)
+                } ?: kotlin.run {
+                    // Handle Null case or Request periodic location update https://developer.android.com/training/location/receive-location-updates
+                }
+            }
         }
 
         return binding.root
@@ -92,8 +127,9 @@ class MapFragment : OnMapReadyCallback, Fragment() {
 
     override fun onMapReady(googleMap: GoogleMap) {
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+
         this.googleMap = googleMap
+        this.googleMap.isMyLocationEnabled = true
         when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_NO -> {
 
@@ -103,6 +139,15 @@ class MapFragment : OnMapReadyCallback, Fragment() {
             } // Night mode is active, we're using dark theme
         }
         //val success = googleMap.setMapStyle(MapStyleOptions(resources.getString(R.string.style_json_dark)))
+
+        val handler = Handler(Looper.getMainLooper())
+        handler.post {
+            val markersList = databaseHelper.markersInitList()
+            for (t in markersList)
+            {
+                this.googleMap.addMarker(t)
+            }
+        }
 
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
@@ -127,17 +172,45 @@ class MapFragment : OnMapReadyCallback, Fragment() {
             currentMarker = marker
             mapFragmentBinding!!.gotoFab.show()
             val markerName = marker.title
-            Toast.makeText(requireContext(), "Clicked location is $markerName", Toast.LENGTH_SHORT)
-                .show()
+            Toast.makeText(requireContext(), "Clicked location is $markerName", Toast.LENGTH_SHORT).show()
             false
         }
 
 
-        this.googleMap.isMyLocationEnabled = true
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+    /*    fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location ->
+                googleMap.animateCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        LatLng(
+                            location.latitude,
+                            location.longitude
+                        ), 13.0f
+                    ), 2000, null
+                )
+            }*/
+
+        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+            location?.let {
+                googleMap.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    LatLng(
+                        location.latitude,
+                        location.longitude
+                    ), 13.0f
+                ), 2000, null)
+            } ?: kotlin.run {
+                // Handle Null case or Request periodic location update https://developer.android.com/training/location/receive-location-updates
+            }
+        }
+
+
         this.googleMap.uiSettings.isCompassEnabled = true
         this.googleMap.uiSettings.isMyLocationButtonEnabled = false
         this.googleMap.uiSettings.isIndoorLevelPickerEnabled = true
         this.googleMap.uiSettings.isMapToolbarEnabled = false
+
         this.googleMap.setOnMapClickListener { point ->
             inserisciPunto(point)
             currentMarker = null
@@ -154,7 +227,7 @@ class MapFragment : OnMapReadyCallback, Fragment() {
         //googleMap.mapType = GoogleMap.MAP_TYPE_TERRAIN
         //TEST
 
-        getMyPosition(13.0f)
+
         /*val como = LatLng(45.808060, 9.085176)
         googleMap.moveCamera(CameraUpdateFactory.zoomTo(12.0f))
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(como))
@@ -176,6 +249,13 @@ class MapFragment : OnMapReadyCallback, Fragment() {
         builder.setPositiveButton("OK") { dialog, which -> // send data from the
             // AlertDialog to the Activity
             val editText = customLayout.findViewById<EditText>(R.id.editText)
+            val picker = customLayout.findViewById<NumberPicker>(R.id.type_wheel_spinner)
+            val data = arrayOf("Berlin", "Moscow", "Tokyo", "Paris")
+            picker.minValue = 0
+            picker.maxValue = data.size - 1
+            picker.displayedValues = data
+
+
             sendDialogDataToActivity(editText.text.toString())
             if (editText.text.isNotEmpty()) {
                 val marker = MarkerOptions().position(LatLng(point.latitude, point.longitude))
@@ -208,39 +288,6 @@ class MapFragment : OnMapReadyCallback, Fragment() {
 
     }
 
-    private fun getMyPosition(zoom: Float) {
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //public void onRequestPermissionsResult(int requestCode, String[] permissions,int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-        }
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location ->
-                googleMap.animateCamera(
-                    CameraUpdateFactory.newLatLngZoom(
-                        LatLng(
-                            location.latitude,
-                            location.longitude
-                        ), zoom
-                    ), 2000, null
-                )
-            }
-
-        //MarkerOptions().position(LatLng(ll.latitude, location.longitude)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
-        //    .title("Io").snippet("we")
-        //googleMap.addMarker(marker)
-
-    }
 
     private fun getMeToMarker(marker: Marker) {
 

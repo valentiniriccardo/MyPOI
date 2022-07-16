@@ -9,17 +9,28 @@
     <EditText
         android:id="@+id/editText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp" />
 
-    <Switch
-        android:id="@+id/switch1"
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/important"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Switch" />
+        android:layout_margin="8dp"
+        android:text="Switch" /> <!--test-->
 
-    <Switch
-        android:id="@+id/switch2"
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/not_important"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Switch" />
+        android:layout_margin="8dp"
+        android:text="Switch" /> <!--test-->
+
+    <NumberPicker
+        android:id="@+id/type_wheel_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"/>
+        <!--android:entries="@array/spinnerItems"-->
+
 </LinearLayout>
