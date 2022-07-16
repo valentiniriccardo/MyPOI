@@ -15,11 +15,11 @@ import com.valentini.mypoi.databinding.MyplacesFragmentBinding
 class MyPlacesFragment : Fragment() {
 
     private lateinit var pageViewModel: PageViewModel
-    private var _placeholder_binding: MyplacesFragmentBinding? = null
+    private var myplacesFragmentBinding: MyplacesFragmentBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
-    private val binding get() = _placeholder_binding!!
+    private val binding get() = myplacesFragmentBinding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +32,7 @@ class MyPlacesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
 
-        _placeholder_binding = MyplacesFragmentBinding.inflate(inflater, container, false)
+        myplacesFragmentBinding = MyplacesFragmentBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -60,7 +60,7 @@ class MyPlacesFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _placeholder_binding = null
+        myplacesFragmentBinding = null
     }
 
     fun createATextView(

@@ -25,7 +25,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.valentini.mypoi.R
 import com.valentini.mypoi.databinding.MapFragmentBinding
-import com.valentini.mypoi.databinding.MyplacesFragmentBinding
 import java.util.*
 
 
@@ -34,12 +33,11 @@ class MapFragment : OnMapReadyCallback, Fragment() {
     lateinit var googleMap: GoogleMap
 
     private lateinit var pageViewModel: PageViewModel
-    private var _binding: MapFragmentBinding? = null
-    private var _myplacesbinding: MyplacesFragmentBinding? = null
+    private var mapFragmentBinding: MapFragmentBinding? = null
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var currentMarker: Marker? = null
 
-    private val binding get() = _binding!!
+    private val binding get() = mapFragmentBinding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,13 +49,13 @@ class MapFragment : OnMapReadyCallback, Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = MapFragmentBinding.inflate(inflater, container, false)
-        _binding!!.gotoFab.hide()
+        mapFragmentBinding = MapFragmentBinding.inflate(inflater, container, false)
+        mapFragmentBinding!!.gotoFab.hide()
         Toast.makeText(requireContext(), "Sto creando!", Toast.LENGTH_SHORT).show()
         val mapFragment =
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment? //IMPORTANTE CHE SIA CHILD E NON PARENT
         mapFragment?.getMapAsync(this@MapFragment)
-        _binding!!.gpsFab.setOnClickListener {
+        mapFragmentBinding!!.gpsFab.setOnClickListener {
             getMyPosition(16.0f) //Se clicco sull'icona vado alle mappe
         }
 
@@ -121,7 +119,7 @@ class MapFragment : OnMapReadyCallback, Fragment() {
         this.googleMap.setOnMarkerClickListener { marker -> // on marker click we are getting the title of our marker
             // which is clicked and displaying it in a toast message.
             currentMarker = marker
-            _binding!!.gotoFab.show()
+            mapFragmentBinding!!.gotoFab.show()
             val markerName = marker.title
             Toast.makeText(requireContext(), "Clicked location is $markerName", Toast.LENGTH_SHORT)
                 .show()
@@ -137,10 +135,10 @@ class MapFragment : OnMapReadyCallback, Fragment() {
         this.googleMap.setOnMapClickListener { point ->
             inserisciPunto(point)
             currentMarker = null
-            _binding!!.gotoFab.hide()
+            mapFragmentBinding!!.gotoFab.hide()
             Toast.makeText(requireContext(), "Cliccato sulla mappa", Toast.LENGTH_SHORT).show()
         }
-        _binding!!.gotoFab.setOnClickListener {
+        mapFragmentBinding!!.gotoFab.setOnClickListener {
             getMeToMarker(currentMarker!!)
         }
 
