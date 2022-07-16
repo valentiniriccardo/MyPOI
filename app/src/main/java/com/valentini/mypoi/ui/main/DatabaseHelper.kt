@@ -40,6 +40,6 @@ open class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         //TODO
         db = this.writableDatabase
         db.insert(TABLE_NAME, null, contentValues)
-        //db.close()
+
     }
 }
