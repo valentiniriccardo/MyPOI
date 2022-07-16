@@ -7,6 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
+import com.valentini.mypoi.database.COL_LATITUDE
+import com.valentini.mypoi.database.COL_LONGITUDE
+import com.valentini.mypoi.database.COL_NAME
+import com.valentini.mypoi.database.DatabaseHelper
 import com.valentini.mypoi.databinding.ActivityMainBinding
 import com.valentini.mypoi.ui.main.*
 

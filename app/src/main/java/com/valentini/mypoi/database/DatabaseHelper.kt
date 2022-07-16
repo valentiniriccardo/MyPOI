@@ -1,11 +1,9 @@
-package com.valentini.mypoi.ui.main
+package com.valentini.mypoi.database
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.util.Log
-import com.google.android.gms.maps.model.Marker
 
 const val DATABASE_VERSION = 3
 const val DATABASE_NAME = "sqlite_data.db"

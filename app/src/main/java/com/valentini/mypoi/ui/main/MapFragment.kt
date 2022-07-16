@@ -24,8 +24,11 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
-import com.valentini.mypoi.MainActivity
 import com.valentini.mypoi.R
+import com.valentini.mypoi.database.COL_LATITUDE
+import com.valentini.mypoi.database.COL_LONGITUDE
+import com.valentini.mypoi.database.COL_NAME
+import com.valentini.mypoi.database.DatabaseHelper
 import com.valentini.mypoi.databinding.MapFragmentBinding
 import java.util.*
 
