@@ -2,6 +2,7 @@ package com.valentini.mypoi.ui.main
 
 import android.Manifest
 import android.app.AlertDialog
+import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -23,6 +24,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.valentini.mypoi.MainActivity
 import com.valentini.mypoi.R
 import com.valentini.mypoi.databinding.MapFragmentBinding
 import java.util.*
@@ -36,7 +38,7 @@ class MapFragment : OnMapReadyCallback, Fragment() {
     private var mapFragmentBinding: MapFragmentBinding? = null
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var currentMarker: Marker? = null
-
+    lateinit var databaseHelper: DatabaseHelper
     private val binding get() = mapFragmentBinding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,9 +46,10 @@ class MapFragment : OnMapReadyCallback, Fragment() {
         pageViewModel = ViewModelProvider(this).get(PageViewModel::class.java).apply {
             setIndex(arguments?.getInt(ARG_SECTION_NUMBER) ?: 1)
         }
-
+        databaseHelper = DatabaseHelper(requireContext())
 
     }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         mapFragmentBinding = MapFragmentBinding.inflate(inflater, container, false)
@@ -142,6 +145,8 @@ class MapFragment : OnMapReadyCallback, Fragment() {
             getMeToMarker(currentMarker!!)
         }
 
+
+
         //Toast.makeText(this@MapFragment.context, "Ciaaooo pronto!", Toast.LENGTH_SHORT).show()
         //googleMap.mapType = GoogleMap.MAP_TYPE_TERRAIN
         //TEST
@@ -182,6 +187,11 @@ class MapFragment : OnMapReadyCallback, Fragment() {
                         ), 16.0f
                     ), 2000, null
                 )
+                val contentValues = ContentValues()
+                contentValues.put(COL_NAME, marker.title)
+                contentValues.put(COL_LATITUDE, marker.position.latitude)
+                contentValues.put(COL_LONGITUDE, marker.position.longitude)
+                databaseHelper.insertMarker(contentValues)
             }
         }
 

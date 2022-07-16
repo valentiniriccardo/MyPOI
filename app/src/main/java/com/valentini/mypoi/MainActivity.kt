@@ -14,12 +14,12 @@ import com.valentini.mypoi.ui.main.*
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var databaseHelper: DatabaseHelper
+    lateinit var databaseHelper: DatabaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        databaseHelper = DatabaseHelper(this)
+        databaseHelper = DatabaseHelper(baseContext)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -36,9 +36,10 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener {
             goToMapTab() //Se clicco sull'icona vado alle mappe
             val contentValues = ContentValues()
-            contentValues.put(COL_NAME, "Ciao 1")
-            contentValues.put(COL_NAME, "Ciao 2")
-            databaseHelper.db.insert(TABLE_NAME, null,contentValues)
+            contentValues.put(COL_NAME, "TEST")
+            contentValues.put(COL_LATITUDE, "1.343545")
+            contentValues.put(COL_LONGITUDE, "34.352326")
+            databaseHelper.insertMarker(contentValues)
             Toast.makeText(this@MainActivity.baseContext, "DB creato", Toast.LENGTH_SHORT).show()
         }
     }
