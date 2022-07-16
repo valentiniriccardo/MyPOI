@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.valentini.mypoi.R
+import java.lang.RuntimeException
 
 private val TAB_TITLES = arrayOf(
     R.string.tab_home,
@@ -33,10 +34,12 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
                 //Toast.makeText(context, "Sezione 3", Toast.LENGTH_SHORT).show()
                 return MyPlacesFragment.newInstance(position + 1)
             }
+            else -> {
+                throw RuntimeException("Tab non esistente")
+            }
         }
         // getItem is called to instantiate the fragment for the given page.
         // Return a MyPlacesFragment (defined as a static inner class below).
-        return Fragment()
     }
 
     override fun getPageTitle(position: Int): CharSequence {
