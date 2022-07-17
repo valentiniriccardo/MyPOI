@@ -1,9 +1,12 @@
 package com.valentini.mypoi
 
+import MyPlacesRecyclerAdapter
 import android.content.ContentValues
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
@@ -13,12 +16,14 @@ import com.valentini.mypoi.database.COL_NAME
 import com.valentini.mypoi.database.DatabaseHelper
 import com.valentini.mypoi.databinding.ActivityMainBinding
 import com.valentini.mypoi.ui.main.*
+import javax.sql.DataSource
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     lateinit var databaseHelper: DatabaseHelper
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         viewPager.adapter = sectionsPagerAdapter
         val tabs: TabLayout = binding.tabs
         tabs.setupWithViewPager(viewPager)
+
 
 
         val fab: FloatingActionButton = binding.fab
@@ -60,6 +66,7 @@ class MainActivity : AppCompatActivity() {
             const val COLUMN_NAME_SUBTITLE = "subtitle"
         }
     }*/
+
 
 
 }

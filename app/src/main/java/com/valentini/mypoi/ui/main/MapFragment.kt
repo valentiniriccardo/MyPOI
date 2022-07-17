@@ -144,6 +144,7 @@ class MapFragment : OnMapReadyCallback, Fragment() {
             for (t in markersList)
             {
                 this.googleMap.addMarker(t)
+
             }
         }
 
@@ -177,18 +178,6 @@ class MapFragment : OnMapReadyCallback, Fragment() {
 
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-    /*    fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location ->
-                googleMap.animateCamera(
-                    CameraUpdateFactory.newLatLngZoom(
-                        LatLng(
-                            location.latitude,
-                            location.longitude
-                        ), 13.0f
-                    ), 2000, null
-                )
-            }*/
-
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             location?.let {
                 googleMap.animateCamera(
