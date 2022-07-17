@@ -14,9 +14,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.NumberPicker
-import android.widget.Toast
+import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -235,6 +233,11 @@ class MapFragment : OnMapReadyCallback, Fragment() {
 
     }
 
+
+
+
+
+
     fun inserisciPunto(point: LatLng) {
 
         // Create an alert builder
@@ -249,13 +252,7 @@ class MapFragment : OnMapReadyCallback, Fragment() {
         builder.setPositiveButton("OK") { dialog, which -> // send data from the
             // AlertDialog to the Activity
             val editText = customLayout.findViewById<EditText>(R.id.editText)
-            val picker = customLayout.findViewById<NumberPicker>(R.id.type_wheel_spinner)
-            val data = arrayOf("Berlin", "Moscow", "Tokyo", "Paris")
-            picker.minValue = 0
-            picker.maxValue = data.size - 1
-            picker.displayedValues = data
-
-
+            editText.isSingleLine = true;
             sendDialogDataToActivity(editText.text.toString())
             if (editText.text.isNotEmpty()) {
                 val marker = MarkerOptions().position(LatLng(point.latitude, point.longitude))

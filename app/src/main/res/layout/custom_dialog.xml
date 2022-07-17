@@ -10,7 +10,13 @@
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp" />
+        android:layout_margin="8dp"
+        android:hint="@string/name_placeholder"
+        android:lines="1"
+        android:maxLines="1"
+        android:minHeight="48dp"
+        android:minLines="1"
+        android:singleLine="true" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/important"
@@ -26,11 +32,47 @@
         android:layout_margin="8dp"
         android:text="Switch" /> <!--test-->
 
-    <NumberPicker
-        android:id="@+id/type_wheel_spinner"
+    <RadioGroup
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"/>
-        <!--android:entries="@array/spinnerItems"-->
+        android:layout_height="match_parent"
+        android:layout_margin="8dp">
+
+        <RadioButton
+            android:id="@+id/radioButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_baseline_home_24"
+            android:text="Personali" />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="RadioButton" />
+
+        <RadioButton
+            android:id="@+id/radioButton3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="RadioButton" />
+
+        <RadioButton
+            android:id="@+id/radioButton4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="RadioButton" />
+
+        <RadioButton
+            android:id="@+id/radioButton5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="RadioButton" />
+
+        <RadioButton
+            android:id="@+id/radioButton6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="RadioButton" />
+    </RadioGroup>
 
 </LinearLayout>

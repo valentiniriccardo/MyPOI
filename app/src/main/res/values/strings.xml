@@ -7,4 +7,5 @@
     <string name="fabContentDescription">Fab aggiunta posizione</string>
     <string name="myplacesdb">myplacesdb</string>
     <string name="dbversion">1.0</string>
+    <string name="name_placeholder">Nome posto</string>
 </resources>
