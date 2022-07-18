@@ -3,9 +3,11 @@ package com.valentini.mypoi.ui.main
 import android.Manifest
 import android.app.AlertDialog
 import android.content.ContentValues
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.graphics.*
 import android.location.Location
 import android.net.Uri
@@ -144,7 +146,7 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
         //val success = googleMap.setMapStyle(MapStyleOptions(resources.getString(R.string.style_json_dark)))
 
 
-        this.googleMap.setInfoWindowAdapter(object : GoogleMap.InfoWindowAdapter {
+        this.googleMap.setInfoWindowAdapter(object : GoogleMap.InfoWindowAdapter { //todo metodo a parte
             override fun getInfoWindow(marker: Marker): View {
                 val info = LinearLayout(this@MapFragment.context)
 
@@ -260,18 +262,6 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
             getMeToMarker(currentMarker!!)
         }
 
-
-
-        //Toast.makeText(this@MapFragment.context, "Ciaaooo pronto!", Toast.LENGTH_SHORT).show()
-        //googleMap.mapType = GoogleMap.MAP_TYPE_TERRAIN
-        //TEST
-
-
-        /*val como = LatLng(45.808060, 9.085176)
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(12.0f))
-        googleMap.animateCamera(CameraUpdateFactory.newLatLng(como))
-        */
-
     }
 
 
@@ -295,22 +285,22 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
 
 
 
-    fun inserisciPunto(point: LatLng) {
+    private fun inserisciPunto(point: LatLng) {
 
         // Create an alert builder
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Name")
+        val builder = AlertDialog.Builder(requireContext()) //R.style.AlertDialogStyle)
+
+        builder.setTitle("Nuova posizione")
 
         // set the custom layout
         val customLayout: View = layoutInflater.inflate(R.layout.custom_dialog, null)
+
+        //builder.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_rounded_rectangle, null)
         builder.setView(customLayout)
-        val radioGroup = customLayout.findViewById<RadioGroup>(options_list)
 
-        val index: Int = radioGroup.indexOfChild(activity?.findViewById(radioGroup.checkedRadioButtonId))
-
-
-        // add a button
         builder.setPositiveButton("OK") { dialog, which -> // send data from the
+
+            //ResourcesCompat.getDrawable(resources, R.drawable.ic_rounded_rectangle, null)
             // AlertDialog to the Activity
             val editText = customLayout.findViewById<EditText>(R.id.editText)
             editText.isSingleLine = true
@@ -327,7 +317,7 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
 
                 val marker = MarkerOptions().position(LatLng(point.latitude, point.longitude))
                     .icon(bitmapDescriptorFromVector(resources.getIdentifier(type, "drawable", requireActivity().applicationContext.packageName
-                    ), Color.parseColor( color)   )) //todo trovare un modo per i colori
+                    ), Color.parseColor( color))).zIndex(5f)
                     .title(editText.text.toString()).snippet(type)
                 googleMap.addMarker(marker)
                 googleMap.animateCamera(
@@ -354,6 +344,7 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
         // create and show
         // the alert dialog
         val dialog = builder.create()
+
         dialog.setCancelable(false)
         dialog.show()
 
