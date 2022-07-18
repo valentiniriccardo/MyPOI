@@ -3,11 +3,9 @@ package com.valentini.mypoi.ui.main
 import android.Manifest
 import android.app.AlertDialog
 import android.content.ContentValues
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.content.res.Resources
 import android.graphics.*
 import android.location.Location
 import android.net.Uri
@@ -34,6 +32,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.valentini.mypoi.R
 import com.valentini.mypoi.R.font.inter_bold
+import com.valentini.mypoi.R.id.goto_fab
 import com.valentini.mypoi.R.id.options_list
 import com.valentini.mypoi.database.*
 import com.valentini.mypoi.databinding.MapFragmentBinding
@@ -148,6 +147,7 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
 
         this.googleMap.setInfoWindowAdapter(object : GoogleMap.InfoWindowAdapter { //todo metodo a parte
             override fun getInfoWindow(marker: Marker): View {
+
                 val info = LinearLayout(this@MapFragment.context)
 
                 info.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_rounded_rectangle, null)
@@ -160,11 +160,7 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
                 title.typeface = ResourcesCompat.getFont(requireContext(), inter_bold)
                 title.text = marker.title
                 title.textSize = 16F
-                title.text = marker.title!!.replaceFirstChar {
-                    if (it.isLowerCase()) it.titlecase(
-                        Locale.ROOT
-                    ) else it.toString()
-                }
+
                 val snippet = TextView(this@MapFragment.context)
                 snippet.text = marker.snippet!!.replaceFirstChar {
                     if (it.isLowerCase()) it.titlecase(
@@ -183,6 +179,11 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
                 return null
             }
         })
+        this.googleMap.setOnInfoWindowLongClickListener {
+            currentMarker!!.remove()
+            databaseHelper.markerRemove(currentMarker!!)
+            setNullAndHide()
+        }
 
         val handler = Handler(Looper.getMainLooper())
         handler.post {
@@ -225,6 +226,7 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
             //Toast.makeText(requireContext(), "Clicked location is $markerName", Toast.LENGTH_SHORT).show()
             false
         }
+
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
@@ -317,7 +319,7 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
 
                 val marker = MarkerOptions().position(LatLng(point.latitude, point.longitude))
                     .icon(bitmapDescriptorFromVector(resources.getIdentifier(type, "drawable", requireActivity().applicationContext.packageName
-                    ), Color.parseColor( color))).zIndex(5f)
+                    ), Color.parseColor( color)))
                     .title(editText.text.toString()).snippet(type)
                 googleMap.addMarker(marker)
                 googleMap.animateCamera(
@@ -375,5 +377,10 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
         p0.snippet
     }
 
+    fun setNullAndHide()
+    {
+        currentMarker = null
+        mapFragmentBinding!!.gotoFab.hide()
+    }
 
 }

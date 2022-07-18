@@ -13,10 +13,7 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import com.google.android.gms.maps.model.BitmapDescriptor
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.valentini.mypoi.MainActivity
 import com.valentini.mypoi.R
 import java.util.*
@@ -85,6 +82,12 @@ open class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
 
         println(COL_TYPE_NAME)
         return ls
+    }
+
+    fun markerRemove(marker : Marker)
+    {
+        db = this.writableDatabase
+        db.execSQL("DELETE FROM $TABLE_NAME WHERE $COL_NAME = '" + marker.title + "' AND $COL_LATITUDE = " + marker.position.latitude + " AND $COL_LONGITUDE = " + marker.position.longitude + "")
     }
 
 

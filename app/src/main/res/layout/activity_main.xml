@@ -38,5 +38,5 @@
         app:fabSize="normal"
         app:maxImageSize="40dp"
         app:pressedTranslationZ="0dp"
-        app:srcCompat="@drawable/ic_add_location" />
+        app:srcCompat="@drawable/ic_map" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
