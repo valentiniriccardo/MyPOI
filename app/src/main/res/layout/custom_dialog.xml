@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:hint="@string/name_placeholder"
+        android:includeFontPadding="true"
         android:lines="1"
         android:maxLines="1"
         android:minHeight="48dp"
@@ -24,18 +25,14 @@
         android:layout_margin="16dp"
         android:text="Switch" /> <!--test-->
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/not_important"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="Switch" /> <!--test-->
+    <!--test-->
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <RadioGroup
+            android:id="@+id/options_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -45,121 +42,72 @@
             android:orientation="vertical">
 
             <RadioButton
-                android:id="@+id/radioButton8"
+                android:id="@+id/rb_speciale"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_baseline_home_24"
+                android:checked="true"
+                android:drawableStart="@drawable/casa"
                 android:drawablePadding="8dp"
-                android:drawableTint="@color/teal_700"
-                android:text="RadioButton" />
+                android:drawableTint="?attr/colorSecondary"
+                android:includeFontPadding="true"
+                android:text="Speciale"
+                android:tooltipText="speciale"/>
 
             <RadioButton
-                android:id="@+id/radioButton7"
+                android:id="@+id/rb_casa"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_baseline_home_24"
+                android:drawableStart="@drawable/casa"
                 android:drawablePadding="8dp"
-                android:drawableTint="@color/teal_700"
-                android:text="RadioButton" />
+                android:drawableTint="@android:color/holo_green_light"
+                android:includeFontPadding="true"
+                android:tooltipText="casa"
+                android:text="Casa" />
 
             <RadioButton
-                android:id="@+id/radioButton10"
+                android:id="@+id/rb_cibo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_baseline_home_24"
+                android:drawableStart="@drawable/cibo"
                 android:drawablePadding="8dp"
-                android:drawableTint="@color/teal_700"
-                android:text="RadioButton" />
+                android:drawableTint="@android:color/holo_blue_dark"
+                android:includeFontPadding="true"
+                android:text="Cibo"
+                android:tooltipText="cibo" />
 
             <RadioButton
-                android:id="@+id/radioButton11"
+                android:id="@+id/rb_divertimento"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_baseline_home_24"
+                android:drawableStart="@drawable/divertimento"
                 android:drawablePadding="8dp"
-                android:drawableTint="@color/teal_700"
-                android:text="RadioButton" />
+                android:drawableTint="@android:color/holo_red_light"
+                android:includeFontPadding="true"
+                android:tooltipText="divertimento"
+                android:text="Divertimento" />
 
             <RadioButton
-                android:id="@+id/radioButton12"
+                android:id="@+id/rb_lavoro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_baseline_home_24"
+                android:drawableStart="@drawable/lavoro"
                 android:drawablePadding="8dp"
-                android:drawableTint="@color/teal_700"
-                android:text="RadioButton" />
+                android:drawableTint="@android:color/holo_orange_light"
+                android:includeFontPadding="true"
+                android:tooltipText="lavoro"
+                android:text="Lavoro" />
 
             <RadioButton
-                android:id="@+id/radioButton13"
+                android:id="@+id/rb_sport"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_baseline_home_24"
+                android:drawableStart="@drawable/sport"
                 android:drawablePadding="8dp"
-                android:drawableTint="@color/teal_700"
-                android:text="RadioButton" />
+                android:drawableTint="@android:color/holo_orange_dark"
+                android:includeFontPadding="true"
+                android:tooltipText="sport"
+                android:text="Sport" />
 
-            <RadioButton
-                android:id="@+id/radioButton14"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_baseline_home_24"
-                android:drawablePadding="8dp"
-                android:drawableTint="@color/teal_700"
-                android:text="RadioButton" />
-
-            <RadioButton
-                android:id="@+id/radioButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_baseline_home_24"
-                android:drawablePadding="8dp"
-                android:drawableTint="@color/teal_700"
-                android:text="Personali" />
-
-            <RadioButton
-                android:id="@+id/radioButton2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_baseline_home_24"
-                android:drawablePadding="8dp"
-                android:drawableTint="@color/teal_700"
-                android:text="RadioButton" />
-
-            <RadioButton
-                android:id="@+id/radioButton3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_baseline_home_24"
-                android:drawablePadding="8dp"
-                android:drawableTint="@color/teal_700"
-                android:text="RadioButton" />
-
-            <RadioButton
-                android:id="@+id/radioButton4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_baseline_home_24"
-                android:drawablePadding="8dp"
-                android:drawableTint="@color/teal_700"
-                android:text="RadioButton" />
-
-            <RadioButton
-                android:id="@+id/radioButton5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_baseline_home_24"
-                android:drawablePadding="8dp"
-                android:drawableTint="@color/teal_700"
-                android:text="RadioButton" />
-
-            <RadioButton
-                android:id="@+id/radioButton6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_baseline_home_24"
-                android:drawablePadding="8dp"
-                android:drawableTint="@color/teal_700"
-                android:text="RadioButton" />
         </RadioGroup>
     </ScrollView>
 

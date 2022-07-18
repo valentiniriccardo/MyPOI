@@ -18,7 +18,7 @@
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="148dp"
         android:contentDescription="TODO"
-        android:src="@drawable/ic_baseline_gps_fixed_24"
+        android:src="@drawable/ic_gps"
         map:maxImageSize="40dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -29,7 +29,7 @@
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="224dp"
         android:contentDescription="TODO"
-        android:src="@drawable/ic_baseline_assistant_direction_24"
+        android:src="@drawable/ic_directions"
         map:maxImageSize="40dp" />
     <!--app:borderWidth="0dp"
     app:fabSize="normal"

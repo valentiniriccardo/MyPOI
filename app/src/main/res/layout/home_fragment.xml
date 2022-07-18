@@ -75,7 +75,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/frame_1" />
+            app:srcCompat="@drawable/main_background" />
 
         <!--<ImageView
             android:id="@+id/circle_image"

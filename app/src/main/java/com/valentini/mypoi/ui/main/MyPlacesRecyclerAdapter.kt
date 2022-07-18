@@ -41,7 +41,7 @@ class MyPlacesRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
         fun bind(myplace : MyPlace)
         {
-            val requestOptions = RequestOptions().placeholder(R.drawable.ic_baseline_home_24).error(R.drawable.ic_baseline_maps_ugc_24)
+            val requestOptions = RequestOptions().placeholder(R.drawable.casa).error(R.drawable.ic_add_maps)
             val load = Glide.with(itemView.context).applyDefaultRequestOptions(requestOptions)
                 .load(myplace.myplace_name)
         }

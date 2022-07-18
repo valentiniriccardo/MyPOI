@@ -6,16 +6,19 @@ import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.graphics.*
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.Display
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -26,10 +29,8 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.valentini.mypoi.R
-import com.valentini.mypoi.database.COL_LATITUDE
-import com.valentini.mypoi.database.COL_LONGITUDE
-import com.valentini.mypoi.database.COL_NAME
-import com.valentini.mypoi.database.DatabaseHelper
+import com.valentini.mypoi.R.id.options_list
+import com.valentini.mypoi.database.*
 import com.valentini.mypoi.databinding.MapFragmentBinding
 import java.util.*
 
@@ -143,8 +144,9 @@ class MapFragment : OnMapReadyCallback, Fragment() {
             val markersList = databaseHelper.markersInitList()
             for (t in markersList)
             {
-                this.googleMap.addMarker(t)
-
+                this.googleMap.addMarker(t.icon(BitmapDescriptorFromVector(resources.getIdentifier(t.snippet, "drawable", requireActivity().applicationContext.packageName
+                ), Color.parseColor("#AE6118"))))
+                Toast.makeText(requireContext(), t.snippet, Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -223,7 +225,23 @@ class MapFragment : OnMapReadyCallback, Fragment() {
     }
 
 
+    private fun BitmapDescriptorFromVector(res: Int, color: Int): BitmapDescriptor {
+        val vectorDrawable = ContextCompat.getDrawable(this.requireContext(), res)
+        vectorDrawable!!.setColorFilter(color, PorterDuff.Mode.MULTIPLY)
+        vectorDrawable.setBounds(0, 0, vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight)
+        val bitmap = Bitmap.createBitmap(vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        vectorDrawable.draw(Canvas(bitmap))
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
+    }
 
+    /*private fun BitmapDescriptorFromVector(res: Int): BitmapDescriptor {
+        val vectorDrawable = ContextCompat.getDrawable(this.requireContext(), res)
+
+        vectorDrawable!!.setBounds(0, 0, vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight)
+        val bitmap = Bitmap.createBitmap(vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        vectorDrawable.draw(Canvas(bitmap))
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
+    }*/
 
 
 
@@ -236,17 +254,28 @@ class MapFragment : OnMapReadyCallback, Fragment() {
         // set the custom layout
         val customLayout: View = layoutInflater.inflate(R.layout.custom_dialog, null)
         builder.setView(customLayout)
+        val radioGroup = customLayout.findViewById<RadioGroup>(options_list)
+
+        val index: Int = radioGroup.indexOfChild(activity?.findViewById(radioGroup.checkedRadioButtonId))
+
 
         // add a button
         builder.setPositiveButton("OK") { dialog, which -> // send data from the
             // AlertDialog to the Activity
             val editText = customLayout.findViewById<EditText>(R.id.editText)
-            editText.isSingleLine = true;
+            editText.isSingleLine = true
+           /* val res = context?.let { ContextCompat.getDrawable(it,resources.getIdentifier(r.tooltipText.toString(), "drawable", context?.packageName)) }
+
+            val bitmap = res?.let { Bitmap.createBitmap(it.intrinsicWidth, it.intrinsicHeight, Bitmap.Config.ARGB_8888) }
+*/
             sendDialogDataToActivity(editText.text.toString())
             if (editText.text.isNotEmpty()) {
+                val rb = customLayout.findViewById<RadioButton>(customLayout.findViewById<RadioGroup>(options_list).checkedRadioButtonId)
+
                 val marker = MarkerOptions().position(LatLng(point.latitude, point.longitude))
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
-                    .title(editText.text.toString()).snippet("we")
+                    .icon(BitmapDescriptorFromVector(resources.getIdentifier(rb.tooltipText.toString(), "drawable", requireActivity().applicationContext.packageName
+                    ), Color.WHITE)) //todo trovare un modo per i colori
+                    .title(editText.text.toString()).snippet(rb.tooltipText.toString())
                 googleMap.addMarker(marker)
                 googleMap.animateCamera(
                     CameraUpdateFactory.newLatLngZoom(
@@ -260,9 +289,12 @@ class MapFragment : OnMapReadyCallback, Fragment() {
                 contentValues.put(COL_NAME, marker.title)
                 contentValues.put(COL_LATITUDE, marker.position.latitude)
                 contentValues.put(COL_LONGITUDE, marker.position.longitude)
+                contentValues.put(COL_TYPE_NAME, rb.tooltipText.toString())
+                Toast.makeText(requireContext(), "Testo: " + rb.tooltipText.toString(), Toast.LENGTH_SHORT).show()
                 databaseHelper.insertMarker(contentValues)
             }
         }
+
 
         builder.setNegativeButton("Annulla") { dialog, which ->
         }
@@ -292,7 +324,7 @@ class MapFragment : OnMapReadyCallback, Fragment() {
     // Do something with the data
     // coming from the AlertDialog
     private fun sendDialogDataToActivity(data: String) {
-        Toast.makeText(requireContext(), data, Toast.LENGTH_SHORT).show()
+        //Toast.makeText(requireContext(), data, Toast.LENGTH_SHORT).show()
     }
 
 
