@@ -148,9 +148,7 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
             override fun getInfoWindow(marker: Marker): View {
                 val info = LinearLayout(this@MapFragment.context)
 
-
-                //info.setBackgroundColor(resources.getColor(R.color.white))
-                info.background = resources.getDrawable(R.drawable.ic_rounded_rectangle)
+                info.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_rounded_rectangle, null)
                 info.setPadding(24)
                 info.clipToOutline = true
                 info.orientation = LinearLayout.VERTICAL
@@ -171,12 +169,9 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
                         Locale.ROOT
                     ) else it.toString()
                 }
-                //this.snippet.minimumWidth = 600
-                //snippet.minimumHeight = 600
                 snippet.setTextColor(Color.GRAY)
                 snippet.gravity = Gravity.CENTER
                 snippet.textSize = 13F
-                //snippet.setImageResource(R.drawable.ic_launcher_background)
                 info.addView(title)
                 info.addView(snippet)
                 return info
@@ -186,7 +181,6 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
                 return null
             }
         })
-
 
         val handler = Handler(Looper.getMainLooper())
         handler.post {
@@ -222,12 +216,11 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
             return
         }
 
-        this.googleMap.setOnMarkerClickListener { marker -> // on marker click we are getting the title of our marker
-            // which is clicked and displaying it in a toast message.
-            currentMarker = marker
+        this.googleMap.setOnMarkerClickListener {
+            currentMarker = it
             mapFragmentBinding!!.gotoFab.show()
-            val markerName = marker.title
-            Toast.makeText(requireContext(), "Clicked location is $markerName", Toast.LENGTH_SHORT).show()
+            val markerName = it.title
+            //Toast.makeText(requireContext(), "Clicked location is $markerName", Toast.LENGTH_SHORT).show()
             false
         }
 
@@ -246,19 +239,24 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
             }
         }
 
-
         this.googleMap.uiSettings.isCompassEnabled = true
         this.googleMap.uiSettings.isMyLocationButtonEnabled = false
         this.googleMap.uiSettings.isIndoorLevelPickerEnabled = true
         this.googleMap.uiSettings.isMapToolbarEnabled = false
 
-        this.googleMap.setOnMapClickListener { point ->
-            inserisciPunto(point)
+        this.googleMap.setOnMapClickListener {
             currentMarker = null
             mapFragmentBinding!!.gotoFab.hide()
-            Toast.makeText(requireContext(), "Cliccato sulla mappa", Toast.LENGTH_SHORT).show()
         }
-        mapFragmentBinding!!.gotoFab.setOnClickListener {
+
+        this.googleMap.setOnMapLongClickListener {
+            inserisciPunto(it)
+            currentMarker = null
+            mapFragmentBinding!!.gotoFab.hide()
+            //Toast.makeText(requireContext(), "Cliccato sulla mappa", Toast.LENGTH_SHORT).show()
+        }
+
+        this.mapFragmentBinding!!.gotoFab.setOnClickListener {
             getMeToMarker(currentMarker!!)
         }
 
