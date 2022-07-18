@@ -45,11 +45,11 @@ class MainActivity : AppCompatActivity() {
 
         fab.setOnClickListener {
             goToMapTab() //Se clicco sull'icona vado alle mappe
-            val contentValues = ContentValues()
+            /*val contentValues = ContentValues()
             contentValues.put(COL_NAME, "TEST")
             contentValues.put(COL_LATITUDE, "1.343545")
             contentValues.put(COL_LONGITUDE, "34.352326")
-            databaseHelper.insertMarker(contentValues)
+            databaseHelper.insertMarker(contentValues)*/
             Toast.makeText(this@MainActivity.baseContext, "DB creato", Toast.LENGTH_SHORT).show()
         }
     }

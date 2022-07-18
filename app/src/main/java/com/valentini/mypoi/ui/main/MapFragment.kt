@@ -12,7 +12,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.Display
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -144,9 +143,14 @@ class MapFragment : OnMapReadyCallback, Fragment() {
             val markersList = databaseHelper.markersInitList()
             for (t in markersList)
             {
-                this.googleMap.addMarker(t.icon(BitmapDescriptorFromVector(resources.getIdentifier(t.snippet, "drawable", requireActivity().applicationContext.packageName
-                ), Color.parseColor("#AE6118"))))
-                Toast.makeText(requireContext(), t.snippet, Toast.LENGTH_SHORT).show()
+                val color = "#" + t.snippet!!.substringAfter("#")
+                val type =  t.snippet!!.substringBefore("#")
+
+                this.googleMap.addMarker(
+                    t.icon(BitmapDescriptorFromVector(resources.getIdentifier(type, "drawable", requireActivity().applicationContext.packageName
+                ), Color.parseColor(color)))
+                    .snippet(type))
+                //Toast.makeText(requireContext(), type, Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -272,10 +276,13 @@ class MapFragment : OnMapReadyCallback, Fragment() {
             if (editText.text.isNotEmpty()) {
                 val rb = customLayout.findViewById<RadioButton>(customLayout.findViewById<RadioGroup>(options_list).checkedRadioButtonId)
 
+                val color = "#" + rb.tooltipText.toString().substringAfter("#")
+                val type =  rb.tooltipText.toString().substringBefore("#")
+
                 val marker = MarkerOptions().position(LatLng(point.latitude, point.longitude))
-                    .icon(BitmapDescriptorFromVector(resources.getIdentifier(rb.tooltipText.toString(), "drawable", requireActivity().applicationContext.packageName
-                    ), Color.WHITE)) //todo trovare un modo per i colori
-                    .title(editText.text.toString()).snippet(rb.tooltipText.toString())
+                    .icon(BitmapDescriptorFromVector(resources.getIdentifier(type, "drawable", requireActivity().applicationContext.packageName
+                    ), Color.parseColor( color)   )) //todo trovare un modo per i colori
+                    .title(editText.text.toString()).snippet(type)
                 googleMap.addMarker(marker)
                 googleMap.animateCamera(
                     CameraUpdateFactory.newLatLngZoom(
@@ -289,8 +296,8 @@ class MapFragment : OnMapReadyCallback, Fragment() {
                 contentValues.put(COL_NAME, marker.title)
                 contentValues.put(COL_LATITUDE, marker.position.latitude)
                 contentValues.put(COL_LONGITUDE, marker.position.longitude)
-                contentValues.put(COL_TYPE_NAME, rb.tooltipText.toString())
-                Toast.makeText(requireContext(), "Testo: " + rb.tooltipText.toString(), Toast.LENGTH_SHORT).show()
+                contentValues.put(COL_TYPE_NAME, rb.tooltipText.toString()) //todo test
+                //Toast.makeText(requireContext(), "Testo: " + rb.tooltipText.toString().substringAfter("#"), Toast.LENGTH_SHORT).show()
                 databaseHelper.insertMarker(contentValues)
             }
         }

@@ -16,16 +16,27 @@
         android:maxLines="1"
         android:minHeight="48dp"
         android:minLines="1"
+        android:inputType="textCapSentences"
         android:singleLine="true" />
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/important"
+    <!--test-->
+
+    <!--test-->
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+
+    <TextView
+        android:id="@+id/label_tipologia"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Switch" /> <!--test-->
-
-    <!--test-->
+        android:fontFamily="@font/inter_bold"
+        android:text="Tipologia"
+        android:textSize="18sp" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -35,9 +46,9 @@
             android:id="@+id/options_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="12dp"
             android:layout_marginBottom="8dp"
             android:orientation="vertical">
 
@@ -46,12 +57,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:drawableStart="@drawable/casa"
+                android:drawableStart="@drawable/speciale"
                 android:drawablePadding="8dp"
-                android:drawableTint="?attr/colorSecondary"
+                android:drawableTint="@android:color/holo_blue_light"
                 android:includeFontPadding="true"
                 android:text="Speciale"
-                android:tooltipText="speciale"/>
+                android:tooltipText="speciale#33B5E5" />
 
             <RadioButton
                 android:id="@+id/rb_casa"
@@ -61,8 +72,8 @@
                 android:drawablePadding="8dp"
                 android:drawableTint="@android:color/holo_green_light"
                 android:includeFontPadding="true"
-                android:tooltipText="casa"
-                android:text="Casa" />
+                android:text="Casa"
+                android:tooltipText="casa#99CC00" />
 
             <RadioButton
                 android:id="@+id/rb_cibo"
@@ -73,7 +84,7 @@
                 android:drawableTint="@android:color/holo_blue_dark"
                 android:includeFontPadding="true"
                 android:text="Cibo"
-                android:tooltipText="cibo" />
+                android:tooltipText="cibo#0099CC" />
 
             <RadioButton
                 android:id="@+id/rb_divertimento"
@@ -83,8 +94,8 @@
                 android:drawablePadding="8dp"
                 android:drawableTint="@android:color/holo_red_light"
                 android:includeFontPadding="true"
-                android:tooltipText="divertimento"
-                android:text="Divertimento" />
+                android:text="Divertimento"
+                android:tooltipText="divertimento#FF4444" />
 
             <RadioButton
                 android:id="@+id/rb_lavoro"
@@ -94,8 +105,8 @@
                 android:drawablePadding="8dp"
                 android:drawableTint="@android:color/holo_orange_light"
                 android:includeFontPadding="true"
-                android:tooltipText="lavoro"
-                android:text="Lavoro" />
+                android:text="Lavoro"
+                android:tooltipText="lavoro#FFBB33" />
 
             <RadioButton
                 android:id="@+id/rb_sport"
@@ -105,8 +116,8 @@
                 android:drawablePadding="8dp"
                 android:drawableTint="@android:color/holo_orange_dark"
                 android:includeFontPadding="true"
-                android:tooltipText="sport"
-                android:text="Sport" />
+                android:text="Sport"
+                android:tooltipText="sport#FF8800" />
 
         </RadioGroup>
     </ScrollView>
