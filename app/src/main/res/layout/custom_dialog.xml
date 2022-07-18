@@ -16,6 +16,7 @@
         android:maxLines="1"
         android:minHeight="48dp"
         android:minLines="1"
+        android:maxLength="32"
         android:inputType="textCapSentences"
         android:singleLine="true" />
 

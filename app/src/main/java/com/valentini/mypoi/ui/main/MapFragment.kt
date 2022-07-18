@@ -12,12 +12,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -28,13 +31,14 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.valentini.mypoi.R
+import com.valentini.mypoi.R.font.inter_bold
 import com.valentini.mypoi.R.id.options_list
 import com.valentini.mypoi.database.*
 import com.valentini.mypoi.databinding.MapFragmentBinding
 import java.util.*
 
 
-class MapFragment : OnMapReadyCallback, Fragment() {
+class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fragment() {
 
     lateinit var googleMap: GoogleMap
 
@@ -123,6 +127,7 @@ class MapFragment : OnMapReadyCallback, Fragment() {
         }
     }
 
+
     override fun onMapReady(googleMap: GoogleMap) {
 
 
@@ -130,13 +135,58 @@ class MapFragment : OnMapReadyCallback, Fragment() {
         this.googleMap.isMyLocationEnabled = true
         when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_NO -> {
-
+                googleMap.setMapStyle(MapStyleOptions(resources.getString(R.string.style_json_light)))
             } // Night mode is not active, we're using the light theme
             Configuration.UI_MODE_NIGHT_YES -> {
                 googleMap.setMapStyle(MapStyleOptions(resources.getString(R.string.style_json_dark)))
             } // Night mode is active, we're using dark theme
         }
         //val success = googleMap.setMapStyle(MapStyleOptions(resources.getString(R.string.style_json_dark)))
+
+
+        this.googleMap.setInfoWindowAdapter(object : GoogleMap.InfoWindowAdapter {
+            override fun getInfoWindow(marker: Marker): View {
+                val info = LinearLayout(this@MapFragment.context)
+
+
+                //info.setBackgroundColor(resources.getColor(R.color.white))
+                info.background = resources.getDrawable(R.drawable.ic_rounded_rectangle)
+                info.setPadding(24)
+                info.clipToOutline = true
+                info.orientation = LinearLayout.VERTICAL
+                val title = TextView(this@MapFragment.context)
+                title.setTextColor(Color.BLACK)
+                title.gravity = Gravity.CENTER
+                title.typeface = ResourcesCompat.getFont(requireContext(), inter_bold)
+                title.text = marker.title
+                title.textSize = 16F
+                title.text = marker.title!!.replaceFirstChar {
+                    if (it.isLowerCase()) it.titlecase(
+                        Locale.ROOT
+                    ) else it.toString()
+                }
+                val snippet = TextView(this@MapFragment.context)
+                snippet.text = marker.snippet!!.replaceFirstChar {
+                    if (it.isLowerCase()) it.titlecase(
+                        Locale.ROOT
+                    ) else it.toString()
+                }
+                //this.snippet.minimumWidth = 600
+                //snippet.minimumHeight = 600
+                snippet.setTextColor(Color.GRAY)
+                snippet.gravity = Gravity.CENTER
+                snippet.textSize = 13F
+                //snippet.setImageResource(R.drawable.ic_launcher_background)
+                info.addView(title)
+                info.addView(snippet)
+                return info
+            }
+
+            override fun getInfoContents(marker: Marker): View? {
+                return null
+            }
+        })
+
 
         val handler = Handler(Looper.getMainLooper())
         handler.post {
@@ -147,7 +197,7 @@ class MapFragment : OnMapReadyCallback, Fragment() {
                 val type =  t.snippet!!.substringBefore("#")
 
                 this.googleMap.addMarker(
-                    t.icon(BitmapDescriptorFromVector(resources.getIdentifier(type, "drawable", requireActivity().applicationContext.packageName
+                    t.icon(bitmapDescriptorFromVector(resources.getIdentifier(type, "drawable", requireActivity().applicationContext.packageName
                 ), Color.parseColor(color)))
                     .snippet(type))
                 //Toast.makeText(requireContext(), type, Toast.LENGTH_SHORT).show()
@@ -180,8 +230,6 @@ class MapFragment : OnMapReadyCallback, Fragment() {
             Toast.makeText(requireContext(), "Clicked location is $markerName", Toast.LENGTH_SHORT).show()
             false
         }
-
-
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
@@ -229,7 +277,7 @@ class MapFragment : OnMapReadyCallback, Fragment() {
     }
 
 
-    private fun BitmapDescriptorFromVector(res: Int, color: Int): BitmapDescriptor {
+    private fun bitmapDescriptorFromVector(res: Int, color: Int): BitmapDescriptor {
         val vectorDrawable = ContextCompat.getDrawable(this.requireContext(), res)
         vectorDrawable!!.setColorFilter(color, PorterDuff.Mode.MULTIPLY)
         vectorDrawable.setBounds(0, 0, vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight)
@@ -272,7 +320,7 @@ class MapFragment : OnMapReadyCallback, Fragment() {
 
             val bitmap = res?.let { Bitmap.createBitmap(it.intrinsicWidth, it.intrinsicHeight, Bitmap.Config.ARGB_8888) }
 */
-            sendDialogDataToActivity(editText.text.toString())
+            //sendDialogDataToActivity(editText.text.toString())
             if (editText.text.isNotEmpty()) {
                 val rb = customLayout.findViewById<RadioButton>(customLayout.findViewById<RadioGroup>(options_list).checkedRadioButtonId)
 
@@ -280,7 +328,7 @@ class MapFragment : OnMapReadyCallback, Fragment() {
                 val type =  rb.tooltipText.toString().substringBefore("#")
 
                 val marker = MarkerOptions().position(LatLng(point.latitude, point.longitude))
-                    .icon(BitmapDescriptorFromVector(resources.getIdentifier(type, "drawable", requireActivity().applicationContext.packageName
+                    .icon(bitmapDescriptorFromVector(resources.getIdentifier(type, "drawable", requireActivity().applicationContext.packageName
                     ), Color.parseColor( color)   )) //todo trovare un modo per i colori
                     .title(editText.text.toString()).snippet(type)
                 googleMap.addMarker(marker)
@@ -332,6 +380,10 @@ class MapFragment : OnMapReadyCallback, Fragment() {
     // coming from the AlertDialog
     private fun sendDialogDataToActivity(data: String) {
         //Toast.makeText(requireContext(), data, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onInfoWindowClick(p0: Marker) {
+        p0.snippet
     }
 
 
