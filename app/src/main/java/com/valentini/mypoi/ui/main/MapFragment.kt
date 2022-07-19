@@ -359,7 +359,7 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
         builder.setTitle("Nuova posizione")
 
         // set the custom layout
-        val customLayout: View = layoutInflater.inflate(R.layout.custom_dialog, null)
+        val customLayout: View = layoutInflater.inflate(R.layout.add_place_dialog, null)
 
         //builder.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_rounded_rectangle, null)
         builder.setView(customLayout)

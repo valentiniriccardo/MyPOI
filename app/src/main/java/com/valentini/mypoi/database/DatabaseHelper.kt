@@ -21,8 +21,6 @@ const val COL_NAME = "name"
 const val COL_LATITUDE = "latitude"
 const val COL_LONGITUDE = "longitude"
 const val COL_TYPE_NAME_COLOR = "typeandcolor"
-//TESTING
-const val COL_COLOR = "color"
 
 open class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION){
 
