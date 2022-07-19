@@ -20,6 +20,8 @@ import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
+import androidx.core.view.marginBottom
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -153,11 +155,12 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
                 val info = LinearLayout(this@MapFragment.context)
 
                 info.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_rounded_rectangle, null)
+                //info.setPadding(24)
                 info.setPadding(24)
                 info.clipToOutline = true
                 info.orientation = LinearLayout.VERTICAL
                 val title = TextView(this@MapFragment.context)
-                title.setTextColor(Color.BLACK)
+                title.setTextColor(resources.getColor(R.color.teal_900, null))
                 title.gravity = Gravity.CENTER
                 title.typeface = ResourcesCompat.getFont(requireContext(), inter_bold)
                 title.text = marker.title
@@ -172,8 +175,10 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
                 snippet.setTextColor(Color.GRAY)
                 snippet.gravity = Gravity.CENTER
                 snippet.textSize = 13F
+                //snippet.isVisible = false todo mod 1
                 info.addView(title)
                 info.addView(snippet)
+
                 return info
             }
 
