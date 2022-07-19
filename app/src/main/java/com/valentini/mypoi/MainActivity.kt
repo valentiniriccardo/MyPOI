@@ -44,12 +44,7 @@ class MainActivity : AppCompatActivity() {
         val fab: FloatingActionButton = binding.fab
 
         fab.setOnClickListener {
-            goToMapTab() //Se clicco sull'icona vado alle mappe
-            /*val contentValues = ContentValues()
-            contentValues.put(COL_NAME, "TEST")
-            contentValues.put(COL_LATITUDE, "1.343545")
-            contentValues.put(COL_LONGITUDE, "34.352326")
-            databaseHelper.insertMarker(contentValues)*/
+            goToMapTab()
             Toast.makeText(this@MainActivity.baseContext, "DB creato", Toast.LENGTH_SHORT).show()
         }
     }
