@@ -187,12 +187,14 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
             }
         })
         this.googleMap.setOnInfoWindowLongClickListener {
-            currentMarker!!.remove()
-            databaseHelper.markerRemove(currentMarker!!)
+            currentMarker?.remove()
+            clicked = false
+            currentMarker?.let { databaseHelper.markerRemove(it) }
             setNullAndHide()
         }
 
         this.googleMap.setOnInfoWindowClickListener {
+
 
             if (!clicked)
             {
@@ -244,6 +246,12 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
         }
 
         this.googleMap.setOnMarkerClickListener {
+            if (currentMarker != it)
+            {
+                clicked = false
+                this.currentMarker?.isDraggable = false
+                currentMarker?.alpha = 1f
+            }
             currentMarker = it
             mapFragmentBinding!!.gotoFab.show()
             val markerName = it.title
@@ -287,11 +295,9 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
         this.googleMap.setOnMapLongClickListener {
             inserisciPunto(it)
 
-
             this.currentMarker?.alpha = 1f
             this.currentMarker?.isDraggable = false
             clicked = false
-
 
             currentMarker = null
             mapFragmentBinding!!.gotoFab.hide()

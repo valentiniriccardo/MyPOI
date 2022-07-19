@@ -20,7 +20,7 @@ import java.util.*
 import java.util.concurrent.Executors
 
 
-const val DATABASE_VERSION = 8
+const val DATABASE_VERSION = 11
 const val DATABASE_NAME = "sqlite_data.db"
 const val TABLE_NAME = "myplaces"
 const val COL_ID = "id"
@@ -75,13 +75,20 @@ open class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
                 MarkerOptions()
                     .title(res.getString(res.getColumnIndex(COL_NAME)))
                     .position(LatLng(res.getDouble(res.getColumnIndex(COL_LATITUDE)), res.getDouble(res.getColumnIndex(COL_LONGITUDE))))
-                    .snippet((res.getString(res.getColumnIndex(COL_TYPE_NAME))))
+                    .snippet(res.getString(res.getColumnIndex(COL_TYPE_NAME)))
+
             ls.add(tempmo)
             res.moveToNext();
         }
 
         println(COL_TYPE_NAME)
         return ls
+    }
+
+    fun markerUpdate(marker : Marker)
+    {
+        db = this.writableDatabase
+        db.execSQL("UPDATE $TABLE_NAME SET $COL_LATITUDE = " + marker.position.latitude + ", $COL_LONGITUDE = " + marker.position.longitude + " WHERE $COL_NAME = '" + marker.title + "' AND $COL_TYPE_NAME like '" + marker.snippet + "%';")
     }
 
     fun markerRemove(marker : Marker)
