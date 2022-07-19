@@ -3,7 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/drawable/casa.xml" value="0.3175" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/drawable/cibo.xml" value="0.314" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/drawable/divertimento.xml" value="0.3175" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/drawable/edit.xml" value="0.3175" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/drawable/ic_add_location.xml" value="0.3175" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/drawable/ic_baseline_add_location_alt_24.xml" value="0.317" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/drawable/ic_baseline_assistant_direction_24.xml" value="0.317" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/drawable/ic_baseline_circle_24.xml" value="0.317" />
@@ -12,9 +16,14 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/drawable/ic_baseline_maps_ugc_24.xml" value="0.317" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/drawable/ic_casa.xml" value="0.3175" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/drawable/ic_cibo.xml" value="0.3175" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/drawable/ic_gps.xml" value="0.3175" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3185" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/drawable/ic_map.xml" value="0.3175" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/drawable/ic_rounded_rectangle.xml" value="0.317" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/drawable/ic_rounded_rectangle_selected.xml" value="0.314" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/drawable/lavoro.xml" value="0.3175" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/drawable/speciale.xml" value="0.3175" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/drawable/sport.xml" value="0.3175" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/font/inter_bold.xml" value="0.5848958333333333" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/layout/activity_main.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/layout/custom_dialog.xml" value="0.4466666666666667" />

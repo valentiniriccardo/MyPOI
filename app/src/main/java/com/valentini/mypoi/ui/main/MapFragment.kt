@@ -199,7 +199,7 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
             if (!clicked)
             {
                 this.currentMarker?.isDraggable = true
-                this.currentMarker?.alpha = 0.5f
+                this.currentMarker?.alpha = 0.33f
                 clicked = true
             } else
             {
