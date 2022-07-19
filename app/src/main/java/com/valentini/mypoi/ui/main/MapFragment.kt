@@ -49,6 +49,8 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
     private var currentMarker: Marker? = null
     lateinit var databaseHelper: DatabaseHelper
     private val binding get() = mapFragmentBinding!!
+    private var clicked = false
+    var old_color = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -178,11 +180,33 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
             override fun getInfoContents(marker: Marker): View? {
                 return null
             }
+
+            fun changeBackground()
+            {
+                //todo
+            }
         })
         this.googleMap.setOnInfoWindowLongClickListener {
             currentMarker!!.remove()
             databaseHelper.markerRemove(currentMarker!!)
             setNullAndHide()
+        }
+
+        this.googleMap.setOnInfoWindowClickListener {
+
+            if (!clicked)
+            {
+                this.currentMarker?.isDraggable = true
+                this.currentMarker?.alpha = 0.5f
+                clicked = true
+            } else
+            {
+                this.currentMarker?.isDraggable = false
+                this.currentMarker?.alpha = 1f
+                clicked = false
+            }
+
+            //setNullAndHide()
         }
 
         val handler = Handler(Looper.getMainLooper())
@@ -228,6 +252,8 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
         }
 
 
+
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             location?.let {
@@ -249,12 +275,24 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
         this.googleMap.uiSettings.isMapToolbarEnabled = false
 
         this.googleMap.setOnMapClickListener {
+
+            this.currentMarker?.alpha = 1f
+            this.currentMarker?.isDraggable = false
+            clicked = false
+
             currentMarker = null
             mapFragmentBinding!!.gotoFab.hide()
         }
 
         this.googleMap.setOnMapLongClickListener {
             inserisciPunto(it)
+
+
+            this.currentMarker?.alpha = 1f
+            this.currentMarker?.isDraggable = false
+            clicked = false
+
+
             currentMarker = null
             mapFragmentBinding!!.gotoFab.hide()
             //Toast.makeText(requireContext(), "Cliccato sulla mappa", Toast.LENGTH_SHORT).show()
@@ -270,8 +308,8 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
     private fun bitmapDescriptorFromVector(res: Int, color: Int): BitmapDescriptor {
         val vectorDrawable = ContextCompat.getDrawable(this.requireContext(), res)
         vectorDrawable!!.setColorFilter(color, PorterDuff.Mode.MULTIPLY)
-        vectorDrawable.setBounds(0, 0, vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight)
-        val bitmap = Bitmap.createBitmap(vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        vectorDrawable.setBounds(0, 0, 96, 96)//vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight)
+        val bitmap = Bitmap.createBitmap(96, 96 /*vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight,*/, Bitmap.Config.ARGB_8888)
         vectorDrawable.draw(Canvas(bitmap))
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
@@ -377,7 +415,7 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
         p0.snippet
     }
 
-    fun setNullAndHide()
+    private fun setNullAndHide()
     {
         currentMarker = null
         mapFragmentBinding!!.gotoFab.hide()
