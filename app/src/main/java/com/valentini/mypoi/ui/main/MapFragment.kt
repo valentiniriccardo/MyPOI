@@ -1,12 +1,16 @@
 package com.valentini.mypoi.ui.main
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
@@ -40,7 +44,7 @@ import com.valentini.mypoi.databinding.MapFragmentBinding
 import java.util.*
 
 
-class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fragment() {
+class MapFragment(val usePositionPermission: Boolean) : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fragment() {
 
     lateinit var googleMap: GoogleMap
 
@@ -52,9 +56,11 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
     private val binding get() = mapFragmentBinding!!
     private var clicked = false
     var old_color = -1
+    private var usePosition = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        this.usePosition = usePositionPermission
         pageViewModel = ViewModelProvider(this).get(PageViewModel::class.java).apply {
             setIndex(arguments?.getInt(ARG_SECTION_NUMBER) ?: 1)
         }
@@ -63,33 +69,26 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
     }
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    @SuppressLint("MissingPermission")
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         mapFragmentBinding = MapFragmentBinding.inflate(inflater, container, false)
         mapFragmentBinding!!.gotoFab.hide()
 
 
-        Toast.makeText(requireContext(), "Sto creando!", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(requireContext(), "Sto creando!", //Toast.LENGTH_SHORT).show()
         val mapFragment =
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment? //IMPORTANTE CHE SIA CHILD E NON PARENT
         mapFragment?.getMapAsync(this@MapFragment)
 
+        if (!usePositionPermission) mapFragmentBinding!!.gpsFab.hide()
         mapFragmentBinding!!.gpsFab.setOnClickListener {
-        //Se clicco sull'icona vado alle mappe
-            if (ActivityCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
+            if (!usePositionPermission){
+                Toast.makeText(this@MapFragment.context, "Permesso posizione negato", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
             }
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 location?.let {
@@ -99,7 +98,8 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
                                 location.latitude,
                                 location.longitude
                             ), 16.0f
-                        ), 2000, null)
+                        ), 2000, null
+                    )
                 } ?: kotlin.run {
                     // Handle Null case or Request periodic location update https://developer.android.com/training/location/receive-location-updates
                 }
@@ -122,8 +122,8 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
          * number.
          */
         @JvmStatic
-        fun newInstance(sectionNumber: Int): MapFragment {
-            return MapFragment().apply {
+        fun newInstance(sectionNumber: Int, usePosition: Boolean): MapFragment {
+            return MapFragment(usePosition).apply {
                 arguments = Bundle().apply {
                     putInt(ARG_SECTION_NUMBER, sectionNumber)
                 }
@@ -136,7 +136,7 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
 
 
         this.googleMap = googleMap
-        this.googleMap.isMyLocationEnabled = true
+        if (usePositionPermission) this.googleMap.isMyLocationEnabled = true
         when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_NO -> {
                 googleMap.setMapStyle(MapStyleOptions(resources.getString(R.string.style_json_light)))
@@ -155,18 +155,20 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
 
             override fun onMarkerDrag(marker: Marker) {}
             override fun onMarkerDragEnd(marker: Marker) {
-                //Toast.makeText(requireContext(), (marker.position.longitude.toString() + "  " + marker.position.latitude), Toast.LENGTH_LONG).show()
+                ////Toast.makeText(requireContext(), (marker.position.longitude.toString() + "  " + marker.position.latitude), //Toast.LENGTH_LONG).show()
                 currentMarker = marker //serve per aggiornare la posizione
                 databaseHelper.markerUpdate(currentMarker!!)
             }
         })
 
-        this.googleMap.setInfoWindowAdapter(object : GoogleMap.InfoWindowAdapter { //todo metodo a parte
+        this.googleMap.setInfoWindowAdapter(object :
+            GoogleMap.InfoWindowAdapter { //todo metodo a parte
             override fun getInfoWindow(marker: Marker): View {
 
                 val info = LinearLayout(this@MapFragment.context)
 
-                info.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_rounded_rectangle, null)
+                info.background =
+                    ResourcesCompat.getDrawable(resources, R.drawable.ic_rounded_rectangle, null)
                 //info.setPadding(24)
                 info.setPadding(24)
                 info.clipToOutline = true
@@ -209,13 +211,11 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
         this.googleMap.setOnInfoWindowClickListener {
 
 
-            if (!clicked)
-            {
+            if (!clicked) {
                 this.currentMarker?.isDraggable = true
                 this.currentMarker?.alpha = 0.33f
                 clicked = true
-            } else
-            {
+            } else {
                 this.currentMarker?.isDraggable = false
                 this.currentMarker?.alpha = 1f
                 clicked = false
@@ -227,23 +227,27 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
         val handler = Handler(Looper.getMainLooper())
         handler.post {
             val markersList = databaseHelper.markersInitList()
-            for (t in markersList)
-            {
+            for (t in markersList) {
                 val prop = t.snippet!!.split("#")
 
                 val id = prop[0]
                 val type = prop[1]
                 val color = prop[2]
-                Toast.makeText(requireContext(), color + type, Toast.LENGTH_LONG).show()
+                //Toast.makeText(requireContext(), color + type, //Toast.LENGTH_LONG).show()
                 /*val color = "#" + t.snippet!!.substringAfter("#")
                 val type =  t.snippet!!.substringBefore("#")*/
 
                 this.googleMap.addMarker(
-                    t.icon(bitmapDescriptorFromVector(resources.getIdentifier(
-                        type, "drawable", requireActivity().applicationContext.packageName
-                ), Color.parseColor("#$color")))
-                    .snippet(t.snippet))
-                //Toast.makeText(requireContext(), type, Toast.LENGTH_SHORT).show()
+                    t.icon(
+                        bitmapDescriptorFromVector(
+                            resources.getIdentifier(
+                                type, "drawable", requireActivity().applicationContext.packageName
+                            ), Color.parseColor("#$color")
+                        )
+                    )
+                        .snippet(t.snippet)
+                )
+                ////Toast.makeText(requireContext(), type, //Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -266,8 +270,7 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
         }
 
         this.googleMap.setOnMarkerClickListener {
-            if (currentMarker != it)
-            {
+            if (currentMarker != it) {
                 clicked = false
                 this.currentMarker?.isDraggable = false
                 currentMarker?.alpha = 1f
@@ -275,7 +278,7 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
             currentMarker = it
             mapFragmentBinding!!.gotoFab.show()
             val markerName = it.title
-            //Toast.makeText(requireContext(), "Clicked location is $markerName", Toast.LENGTH_SHORT).show()
+            ////Toast.makeText(requireContext(), "Clicked location is $markerName", //Toast.LENGTH_SHORT).show()
             false
         }
 
@@ -286,12 +289,13 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             location?.let {
                 googleMap.animateCamera(
-                CameraUpdateFactory.newLatLngZoom(
-                    LatLng(
-                        location.latitude,
-                        location.longitude
-                    ), 13.0f
-                ), 2000, null)
+                    CameraUpdateFactory.newLatLngZoom(
+                        LatLng(
+                            location.latitude,
+                            location.longitude
+                        ), 13.0f
+                    ), 2000, null
+                )
             } ?: kotlin.run {
                 // Handle Null case or Request periodic location update https://developer.android.com/training/location/receive-location-updates
             }
@@ -321,7 +325,7 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
 
             currentMarker = null
             mapFragmentBinding!!.gotoFab.hide()
-            //Toast.makeText(requireContext(), "Cliccato sulla mappa", Toast.LENGTH_SHORT).show()
+            ////Toast.makeText(requireContext(), "Cliccato sulla mappa", //Toast.LENGTH_SHORT).show()
         }
 
         this.mapFragmentBinding!!.gotoFab.setOnClickListener {
@@ -334,8 +338,17 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
     private fun bitmapDescriptorFromVector(res: Int, color: Int): BitmapDescriptor {
         val vectorDrawable = ContextCompat.getDrawable(this.requireContext(), res)
         vectorDrawable!!.setColorFilter(color, PorterDuff.Mode.MULTIPLY)
-        vectorDrawable.setBounds(0, 0, 96, 96)//vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight)
-        val bitmap = Bitmap.createBitmap(96, 96 /*vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight,*/, Bitmap.Config.ARGB_8888)
+        vectorDrawable.setBounds(
+            0,
+            0,
+            96,
+            96
+        )//vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight)
+        val bitmap = Bitmap.createBitmap(
+            96,
+            96 /*vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight,*/,
+            Bitmap.Config.ARGB_8888
+        )
         vectorDrawable.draw(Canvas(bitmap))
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
@@ -348,7 +361,6 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
         vectorDrawable.draw(Canvas(bitmap))
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }*/
-
 
 
     private fun inserisciPunto(point: LatLng) {
@@ -370,20 +382,27 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
             // AlertDialog to the Activity
             val editText = customLayout.findViewById<EditText>(R.id.editText)
             editText.isSingleLine = true
-           /* val res = context?.let { ContextCompat.getDrawable(it,resources.getIdentifier(r.tooltipText.toString(), "drawable", context?.packageName)) }
+            /* val res = context?.let { ContextCompat.getDrawable(it,resources.getIdentifier(r.tooltipText.toString(), "drawable", context?.packageName)) }
 
-            val bitmap = res?.let { Bitmap.createBitmap(it.intrinsicWidth, it.intrinsicHeight, Bitmap.Config.ARGB_8888) }
-*/
+             val bitmap = res?.let { Bitmap.createBitmap(it.intrinsicWidth, it.intrinsicHeight, Bitmap.Config.ARGB_8888) }
+ */
             //sendDialogDataToActivity(editText.text.toString())
             if (editText.text.isNotEmpty()) {
-                val rb = customLayout.findViewById<RadioButton>(customLayout.findViewById<RadioGroup>(options_list).checkedRadioButtonId)
+                val rb = customLayout.findViewById<RadioButton>(
+                    customLayout.findViewById<RadioGroup>(options_list).checkedRadioButtonId
+                )
 
                 val color = "#" + rb.tooltipText.toString().substringAfter("#")
-                val type =  rb.tooltipText.toString().substringBefore("#")
+                val type = rb.tooltipText.toString().substringBefore("#")
 
                 val marker = MarkerOptions().position(LatLng(point.latitude, point.longitude))
-                    .icon(bitmapDescriptorFromVector(resources.getIdentifier(type, "drawable", requireActivity().applicationContext.packageName
-                    ), Color.parseColor( color)))
+                    .icon(
+                        bitmapDescriptorFromVector(
+                            resources.getIdentifier(
+                                type, "drawable", requireActivity().applicationContext.packageName
+                            ), Color.parseColor(color)
+                        )
+                    )
                     .title(editText.text.toString())
 
                 val contentValues = ContentValues()
@@ -391,8 +410,8 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
                 contentValues.put(COL_LATITUDE, marker.position.latitude)
                 contentValues.put(COL_LONGITUDE, marker.position.longitude)
                 contentValues.put(COL_TYPE_NAME_COLOR, rb.tooltipText.toString()) //todo test
-                //Toast.makeText(requireContext(), "Testo: " + rb.tooltipText.toString().substringAfter("#"), Toast.LENGTH_SHORT).show()
-                val new_id : Int = databaseHelper.insertMarker(contentValues)
+                ////Toast.makeText(requireContext(), "Testo: " + rb.tooltipText.toString().substringAfter("#"), //Toast.LENGTH_SHORT).show()
+                val new_id: Int = databaseHelper.insertMarker(contentValues)
                 marker.snippet("$new_id$color#$type")
 
                 googleMap.addMarker(marker)
@@ -437,15 +456,14 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
     // Do something with the data
     // coming from the AlertDialog
     private fun sendDialogDataToActivity(data: String) {
-        //Toast.makeText(requireContext(), data, Toast.LENGTH_SHORT).show()
+        ////Toast.makeText(requireContext(), data, //Toast.LENGTH_SHORT).show()
     }
 
     override fun onInfoWindowClick(p0: Marker) {
         p0.snippet
     }
 
-    private fun setNullAndHide()
-    {
+    private fun setNullAndHide() {
         currentMarker = null
         mapFragmentBinding!!.gotoFab.hide()
     }

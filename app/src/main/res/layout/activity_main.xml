@@ -16,8 +16,8 @@
             android:layout_height="wrap_content"
             app:tabIndicatorAnimationMode="elastic"
             app:tabIndicatorColor="@color/teal_700"
-            app:tabTextAppearance="@style/tab_text"
-            app:tabIndicatorHeight="4dp" />
+            app:tabIndicatorHeight="4dp"
+            app:tabTextAppearance="@style/tab_text" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager

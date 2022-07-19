@@ -12,7 +12,10 @@ private val TAB_TITLES = arrayOf(
     R.string.tab_myplaces,
 )
 
-class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class SectionsPagerAdapter(private val context: Context, fm: FragmentManager,
+                           private var usePosition: Boolean
+) :
+    FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getItem(position: Int): Fragment {
         return when (position) {
@@ -20,7 +23,7 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : 
                 HomeFragment.newInstance(position + 1) //+1 perché il tab fa 0,1,2,3...
             }
             1 -> {
-                MapFragment.newInstance(position + 1)
+                MapFragment.newInstance(position + 1, usePosition)
             }
             2 -> {
                 MyPlacesFragment.newInstance(position + 1)

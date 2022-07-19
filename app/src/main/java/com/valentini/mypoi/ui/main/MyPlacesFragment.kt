@@ -10,9 +10,6 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.valentini.mypoi.R
 import com.valentini.mypoi.databinding.MyplacesFragmentBinding
 
 
@@ -20,7 +17,7 @@ class MyPlacesFragment : Fragment() {
 
     private lateinit var pageViewModel: PageViewModel
     private var myplacesFragmentBinding: MyplacesFragmentBinding? = null
-    private lateinit var recyclerAdapter : MyPlacesRecyclerAdapter
+    private lateinit var recyclerAdapter: MyPlacesRecyclerAdapter
 
     // This property is only valid between onCreateView and
     // onDestroyView.
