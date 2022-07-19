@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical"
+    android:textAlignment="gravity">
+    <!--android:background="@drawable/ic_rounded_rectangle"-->
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:autofillHints="Nome del posto"
+        android:fontFamily="@font/inter_light"
+        android:hint="@string/name_placeholder"
+        android:includeFontPadding="true"
+        android:inputType="textCapSentences"
+        android:lines="1"
+        android:maxLength="32"
+        android:maxLines="1"
+        android:minHeight="48dp"
+        android:minLines="1"
+        android:singleLine="true" />
+
+    <!--test-->
+
+    <!--test-->
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@color/teal_700" />
+
+    <TextView
+        android:id="@+id/label_tipologia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:fontFamily="@font/inter_bold"
+        android:includeFontPadding="true"
+        android:inputType="text"
+        android:text="Tipologia"
+        android:textSize="18sp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RadioGroup
+            android:id="@+id/options_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/rb_speciale"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:drawableStart="@drawable/speciale"
+                android:drawablePadding="8dp"
+                android:drawableTint="@android:color/holo_blue_light"
+                android:fontFamily="@font/inter_light"
+                android:includeFontPadding="true"
+                android:text="Speciale"
+                android:textAlignment="viewStart"
+                android:tooltipText="speciale#33B5E5"
+                android:typeface="normal" />
+
+            <RadioButton
+                android:id="@+id/rb_casa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/casa"
+                android:drawablePadding="8dp"
+                android:drawableTint="@android:color/holo_green_light"
+                android:fontFamily="@font/inter_light"
+                android:includeFontPadding="true"
+                android:text="Casa"
+                android:textAlignment="viewStart"
+                android:tooltipText="casa#99CC00"
+                android:typeface="normal" />
+
+            <RadioButton
+                android:id="@+id/rb_cibo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/cibo"
+                android:drawablePadding="8dp"
+                android:drawableTint="@android:color/holo_blue_dark"
+                android:fontFamily="@font/inter_light"
+                android:includeFontPadding="true"
+                android:text="Cibo"
+                android:textAlignment="viewStart"
+                android:tooltipText="cibo#0099CC"
+                android:typeface="normal" />
+
+            <RadioButton
+                android:id="@+id/rb_divertimento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/divertimento"
+                android:drawablePadding="8dp"
+                android:drawableTint="@android:color/holo_red_light"
+                android:fontFamily="@font/inter_light"
+                android:includeFontPadding="true"
+                android:text="Divertimento"
+                android:textAlignment="viewStart"
+                android:tooltipText="divertimento#FF4444"
+                android:typeface="normal" />
+
+            <RadioButton
+                android:id="@+id/rb_lavoro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/lavoro"
+                android:drawablePadding="8dp"
+                android:drawableTint="@android:color/holo_orange_light"
+                android:fontFamily="@font/inter_light"
+                android:includeFontPadding="true"
+                android:text="Lavoro"
+                android:textAlignment="viewStart"
+                android:tooltipText="lavoro#FFBB33"
+                android:typeface="normal" />
+
+            <RadioButton
+                android:id="@+id/rb_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/sport"
+                android:drawablePadding="8dp"
+                android:drawableTint="@android:color/holo_orange_dark"
+                android:fontFamily="@font/inter_light"
+                android:includeFontPadding="true"
+                android:text="Sport"
+                android:textAlignment="viewStart"
+                android:tooltipText="sport#FF8800"
+                android:typeface="normal" />
+
+        </RadioGroup>
+    </ScrollView>
+
+</LinearLayout>
