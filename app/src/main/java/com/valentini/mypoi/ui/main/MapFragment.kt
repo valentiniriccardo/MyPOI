@@ -21,7 +21,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
-import androidx.core.view.marginBottom
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -29,12 +28,12 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.valentini.mypoi.R
 import com.valentini.mypoi.R.font.inter_bold
-import com.valentini.mypoi.R.id.goto_fab
 import com.valentini.mypoi.R.id.options_list
 import com.valentini.mypoi.database.*
 import com.valentini.mypoi.databinding.MapFragmentBinding
@@ -149,6 +148,19 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
         //val success = googleMap.setMapStyle(MapStyleOptions(resources.getString(R.string.style_json_dark)))
 
 
+        this.googleMap.setOnMarkerDragListener(object : OnMarkerDragListener {
+            override fun onMarkerDragStart(marker: Marker) {
+
+            }
+
+            override fun onMarkerDrag(marker: Marker) {}
+            override fun onMarkerDragEnd(marker: Marker) {
+                //Toast.makeText(requireContext(), (marker.position.longitude.toString() + "  " + marker.position.latitude), Toast.LENGTH_LONG).show()
+                currentMarker = marker //serve per aggiornare la posizione
+                databaseHelper.markerUpdate(currentMarker!!)
+            }
+        })
+
         this.googleMap.setInfoWindowAdapter(object : GoogleMap.InfoWindowAdapter { //todo metodo a parte
             override fun getInfoWindow(marker: Marker): View {
 
@@ -175,7 +187,7 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
                 snippet.setTextColor(Color.GRAY)
                 snippet.gravity = Gravity.CENTER
                 snippet.textSize = 13F
-                //snippet.isVisible = false todo mod 1
+                snippet.isVisible = false
                 info.addView(title)
                 info.addView(snippet)
 
@@ -186,10 +198,6 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
                 return null
             }
 
-            fun changeBackground()
-            {
-                //todo
-            }
         })
         this.googleMap.setOnInfoWindowLongClickListener {
             currentMarker?.remove()
@@ -221,13 +229,20 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
             val markersList = databaseHelper.markersInitList()
             for (t in markersList)
             {
-                val color = "#" + t.snippet!!.substringAfter("#")
-                val type =  t.snippet!!.substringBefore("#")
+                val prop = t.snippet!!.split("#")
+
+                val id = prop[0]
+                val type = prop[1]
+                val color = prop[2]
+                Toast.makeText(requireContext(), color + type, Toast.LENGTH_LONG).show()
+                /*val color = "#" + t.snippet!!.substringAfter("#")
+                val type =  t.snippet!!.substringBefore("#")*/
 
                 this.googleMap.addMarker(
-                    t.icon(bitmapDescriptorFromVector(resources.getIdentifier(type, "drawable", requireActivity().applicationContext.packageName
-                ), Color.parseColor(color)))
-                    .snippet(type))
+                    t.icon(bitmapDescriptorFromVector(resources.getIdentifier(
+                        type, "drawable", requireActivity().applicationContext.packageName
+                ), Color.parseColor("#$color")))
+                    .snippet(t.snippet))
                 //Toast.makeText(requireContext(), type, Toast.LENGTH_SHORT).show()
             }
         }
@@ -369,7 +384,17 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
                 val marker = MarkerOptions().position(LatLng(point.latitude, point.longitude))
                     .icon(bitmapDescriptorFromVector(resources.getIdentifier(type, "drawable", requireActivity().applicationContext.packageName
                     ), Color.parseColor( color)))
-                    .title(editText.text.toString()).snippet(type)
+                    .title(editText.text.toString())
+
+                val contentValues = ContentValues()
+                contentValues.put(COL_NAME, marker.title)
+                contentValues.put(COL_LATITUDE, marker.position.latitude)
+                contentValues.put(COL_LONGITUDE, marker.position.longitude)
+                contentValues.put(COL_TYPE_NAME_COLOR, rb.tooltipText.toString()) //todo test
+                //Toast.makeText(requireContext(), "Testo: " + rb.tooltipText.toString().substringAfter("#"), Toast.LENGTH_SHORT).show()
+                val new_id : Int = databaseHelper.insertMarker(contentValues)
+                marker.snippet("$new_id$color#$type")
+
                 googleMap.addMarker(marker)
                 googleMap.animateCamera(
                     CameraUpdateFactory.newLatLngZoom(
@@ -379,13 +404,6 @@ class MapFragment : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fra
                         ), 16.0f
                     ), 2000, null
                 )
-                val contentValues = ContentValues()
-                contentValues.put(COL_NAME, marker.title)
-                contentValues.put(COL_LATITUDE, marker.position.latitude)
-                contentValues.put(COL_LONGITUDE, marker.position.longitude)
-                contentValues.put(COL_TYPE_NAME, rb.tooltipText.toString()) //todo test
-                //Toast.makeText(requireContext(), "Testo: " + rb.tooltipText.toString().substringAfter("#"), Toast.LENGTH_SHORT).show()
-                databaseHelper.insertMarker(contentValues)
             }
         }
 
