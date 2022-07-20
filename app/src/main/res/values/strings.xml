@@ -8,4 +8,11 @@
     <string name="myplacesdb">myplacesdb</string>
     <string name="dbversion">1.0</string>
     <string name="name_placeholder">Nome posto</string>
+    <string name="string_to_do_text2">• Salvare la posizione in cui ti trovi\n• Sceglierne una sulla mappa\n• Modificare le posizioni salvate ed eliminarle</string>
+    <string name="string_to_do_text">In questa app puoi...</string>
+    <string name="string_welcome">Benvenuto in</string>
+    <string name="mypoi">MyPOI</string>
+    <string name="home_image_description">globe</string>
+    <string name="string_mod_tipologia">Modifica tipologia</string>
+    <string name="mod_name_placeholder">Modifica nome posto</string>
 </resources>

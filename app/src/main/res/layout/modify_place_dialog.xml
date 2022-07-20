@@ -11,9 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:autofillHints="Nome del posto"
+        android:autofillHints="Modifica del posto"
         android:fontFamily="@font/inter_light"
-        android:hint="@string/name_placeholder"
         android:includeFontPadding="true"
         android:inputType="textCapSentences"
         android:lines="1"
@@ -38,10 +37,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:fontFamily="@font/inter_bold"
+        android:fontFamily="@font/inter_light"
         android:includeFontPadding="true"
-        android:inputType="text"
-        android:text="Tipologia"
+        android:minHeight="48dp"
+        android:text="@string/string_mod_tipologia"
         android:textSize="18sp" />
 
     <ScrollView
@@ -59,10 +58,10 @@
             android:orientation="vertical">
 
             <RadioButton
-                android:id="@+id/rb_speciale"
+                android:id="@+id/rb_mod_speciale"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:checked="true"
+                android:checked="false"
                 android:drawableStart="@drawable/speciale"
                 android:drawablePadding="8dp"
                 android:drawableTint="@android:color/holo_blue_light"
@@ -74,7 +73,7 @@
                 android:typeface="normal" />
 
             <RadioButton
-                android:id="@+id/rb_casa"
+                android:id="@+id/rb_mod_casa"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/casa"
@@ -88,7 +87,7 @@
                 android:typeface="normal" />
 
             <RadioButton
-                android:id="@+id/rb_cibo"
+                android:id="@+id/rb_mod_cibo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/cibo"
@@ -102,7 +101,7 @@
                 android:typeface="normal" />
 
             <RadioButton
-                android:id="@+id/rb_divertimento"
+                android:id="@+id/rb_mod_divertimento"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/divertimento"
@@ -116,7 +115,7 @@
                 android:typeface="normal" />
 
             <RadioButton
-                android:id="@+id/rb_lavoro"
+                android:id="@+id/rb_mod_lavoro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/lavoro"
@@ -130,7 +129,21 @@
                 android:typeface="normal" />
 
             <RadioButton
-                android:id="@+id/rb_bar"
+                android:id="@+id/rb_mod_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/bar"
+                android:drawablePadding="8dp"
+                android:drawableTint="#512DA8"
+                android:fontFamily="@font/inter_light"
+                android:includeFontPadding="true"
+                android:text="Bar"
+                android:textAlignment="viewStart"
+                android:tooltipText="bar#512DA8"
+                android:typeface="normal" />
+
+            <RadioButton
+                android:id="@+id/rb_mod_sport"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/sport"

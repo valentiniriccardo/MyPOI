@@ -15,8 +15,8 @@ import java.util.*
 import java.util.concurrent.Executors
 
 
-const val DATABASE_VERSION = 13
-const val DATABASE_NAME = "sqlite_data.db"
+const val DATABASE_VERSION = 4
+const val DATABASE_NAME = "sqlite_dataa.db"
 const val TABLE_NAME = "myplaces"
 const val COL_ID = "id"
 const val COL_NAME = "name"
@@ -103,10 +103,19 @@ open class DatabaseHelper(context: Context) :
         return ls
     }
 
-    fun markerUpdate(marker: Marker) {
+    fun markerCoordinatesUpdate(marker: Marker) {
         db = this.writableDatabase
         db.execSQL(
             "UPDATE $TABLE_NAME SET $COL_LATITUDE = " + marker.position.latitude + ", $COL_LONGITUDE = " + marker.position.longitude + " WHERE $COL_ID = " + marker.snippet!!.substringBefore(
+                "#"
+            ) + ";"
+        )
+    }
+
+    fun markerDataUpdate(marker: Marker) {
+        db = this.writableDatabase
+        db.execSQL(
+            "UPDATE $TABLE_NAME SET $COL_NAME = '" + marker.title + "', $COL_TYPE_NAME_COLOR = '" + marker.snippet!!.substringAfter("#") + "' WHERE $COL_ID = " + marker.snippet!!.substringBefore(
                 "#"
             ) + ";"
         )

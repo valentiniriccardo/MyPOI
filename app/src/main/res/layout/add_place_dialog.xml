@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:fontFamily="@font/inter_bold"
+        android:fontFamily="@font/inter_light"
         android:includeFontPadding="true"
         android:inputType="text"
         android:minHeight="48dp"
@@ -60,7 +60,7 @@
             android:orientation="vertical">
 
             <RadioButton
-                android:id="@+id/rb_speciale"
+                android:id="@+id/rb_add_speciale"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
@@ -75,7 +75,7 @@
                 android:typeface="normal" />
 
             <RadioButton
-                android:id="@+id/rb_casa"
+                android:id="@+id/rb_add_casa"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/casa"
@@ -89,7 +89,7 @@
                 android:typeface="normal" />
 
             <RadioButton
-                android:id="@+id/rb_cibo"
+                android:id="@+id/rb_add_cibo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/cibo"
@@ -103,7 +103,7 @@
                 android:typeface="normal" />
 
             <RadioButton
-                android:id="@+id/rb_divertimento"
+                android:id="@+id/rb_add_divertimento"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/divertimento"
@@ -117,7 +117,7 @@
                 android:typeface="normal" />
 
             <RadioButton
-                android:id="@+id/rb_lavoro"
+                android:id="@+id/rb_add_lavoro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/lavoro"
@@ -132,7 +132,7 @@
                 android:typeface="normal" />
 
             <RadioButton
-                android:id="@+id/rb_bar"
+                android:id="@+id/rb_add_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/bar"
@@ -146,7 +146,7 @@
                 android:typeface="normal" />
 
             <RadioButton
-                android:id="@+id/rb_sport"
+                android:id="@+id/rb_add_sport"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/sport"
