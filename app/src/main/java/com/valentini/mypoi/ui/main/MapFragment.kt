@@ -16,6 +16,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.DisplayMetrics
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -334,19 +335,25 @@ class MapFragment(val usePositionPermission: Boolean) : OnMapReadyCallback, Goog
 
     }
 
+    //2.815 oneplus
+    //1.65 mi4a
 
     private fun bitmapDescriptorFromVector(res: Int, color: Int): BitmapDescriptor {
+        val displaymetrics = DisplayMetrics()
+        requireActivity().windowManager.defaultDisplay.getMetrics(displaymetrics)
+        val value = resources.displayMetrics.density
         val vectorDrawable = ContextCompat.getDrawable(this.requireContext(), res)
+        Toast.makeText(requireContext(), "" + value, Toast.LENGTH_LONG).show()
         vectorDrawable!!.setColorFilter(color, PorterDuff.Mode.MULTIPLY)
         vectorDrawable.setBounds(
             0,
             0,
-            96,
-            96
+            44 * value.toInt(),
+            44 * value.toInt()
         )//vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight)
         val bitmap = Bitmap.createBitmap(
-            96,
-            96 /*vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight,*/,
+            44 * value.toInt(),
+            44 * value.toInt() /*vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight,*/,
             Bitmap.Config.ARGB_8888
         )
         vectorDrawable.draw(Canvas(bitmap))
