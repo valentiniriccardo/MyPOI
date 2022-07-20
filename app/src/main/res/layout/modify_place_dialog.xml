@@ -69,7 +69,7 @@
                 android:includeFontPadding="true"
                 android:text="Speciale"
                 android:textAlignment="viewStart"
-                android:tooltipText="speciale#33B5E5"
+                android:tooltipText="33B5E5#speciale"
                 android:typeface="normal" />
 
             <RadioButton
@@ -83,7 +83,7 @@
                 android:includeFontPadding="true"
                 android:text="Casa"
                 android:textAlignment="viewStart"
-                android:tooltipText="casa#99CC00"
+                android:tooltipText="99CC00#casa"
                 android:typeface="normal" />
 
             <RadioButton
@@ -97,7 +97,7 @@
                 android:includeFontPadding="true"
                 android:text="Cibo"
                 android:textAlignment="viewStart"
-                android:tooltipText="cibo#0099CC"
+                android:tooltipText="0099CC#cibo"
                 android:typeface="normal" />
 
             <RadioButton
@@ -111,7 +111,7 @@
                 android:includeFontPadding="true"
                 android:text="Divertimento"
                 android:textAlignment="viewStart"
-                android:tooltipText="divertimento#FF4444"
+                android:tooltipText="FF4444#divertimento"
                 android:typeface="normal" />
 
             <RadioButton
@@ -125,7 +125,7 @@
                 android:includeFontPadding="true"
                 android:text="Lavoro"
                 android:textAlignment="viewStart"
-                android:tooltipText="lavoro#FFBB33"
+                android:tooltipText="FFBB33#lavoro"
                 android:typeface="normal" />
 
             <RadioButton
@@ -139,7 +139,7 @@
                 android:includeFontPadding="true"
                 android:text="Bar"
                 android:textAlignment="viewStart"
-                android:tooltipText="bar#512DA8"
+                android:tooltipText="512DA8#bar"
                 android:typeface="normal" />
 
             <RadioButton
@@ -153,7 +153,7 @@
                 android:includeFontPadding="true"
                 android:text="Sport"
                 android:textAlignment="viewStart"
-                android:tooltipText="sport#FF8800"
+                android:tooltipText="FF8800#sport"
                 android:typeface="normal" />
 
         </RadioGroup>

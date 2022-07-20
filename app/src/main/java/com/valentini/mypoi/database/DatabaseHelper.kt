@@ -15,7 +15,7 @@ import java.util.*
 import java.util.concurrent.Executors
 
 
-const val DATABASE_VERSION = 4
+const val DATABASE_VERSION = 7
 const val DATABASE_NAME = "sqlite_dataa.db"
 const val TABLE_NAME = "myplaces"
 const val COL_ID = "id"

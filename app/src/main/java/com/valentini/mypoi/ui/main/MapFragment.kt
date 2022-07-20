@@ -372,8 +372,8 @@ class MapFragment(private val usePositionPermission: Boolean) : OnMapReadyCallba
                     customLayout.findViewById<RadioGroup>(options_list).checkedRadioButtonId
                 )
 
-                val color = rb.tooltipText.toString().substringAfter("#")
-                val type = rb.tooltipText.toString().substringBefore("#")
+                val color = rb.tooltipText.toString().substringBefore("#")
+                val type = rb.tooltipText.toString().substringAfter("#")
 
                 val marker = MarkerOptions().position(LatLng(point.latitude, point.longitude))
                     .icon(
@@ -458,8 +458,8 @@ class MapFragment(private val usePositionPermission: Boolean) : OnMapReadyCallba
                     customLayout.findViewById<RadioGroup>(options_list).checkedRadioButtonId
                 )
                 val id = oldmarker.snippet!!.substringBefore("#")
-                val color = rb.tooltipText.toString().substringAfter("#")
-                val type = rb.tooltipText.toString().substringBefore("#")
+                val color = rb.tooltipText.toString().split("#")[0]
+                val type = rb.tooltipText.toString().split("#")[1]
 
                 oldmarker.remove()
                 val marker = MarkerOptions().position(LatLng(oldmarker.position.latitude, oldmarker.position.longitude))
