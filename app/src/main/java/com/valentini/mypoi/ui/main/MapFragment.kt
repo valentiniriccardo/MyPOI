@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -43,14 +42,12 @@ import com.valentini.mypoi.R.font.inter_bold
 import com.valentini.mypoi.R.id.options_list
 import com.valentini.mypoi.database.*
 import com.valentini.mypoi.databinding.MapFragmentBinding
-import java.lang.reflect.Field
 import java.util.*
 
 
-class MapFragment(private val usePositionPermission: Boolean) : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fragment() {
+class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, Fragment() {
 
     lateinit var googleMap: GoogleMap
-
     private lateinit var pageViewModel: PageViewModel
     var mapFragmentBinding: MapFragmentBinding? = null
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -58,18 +55,17 @@ class MapFragment(private val usePositionPermission: Boolean) : OnMapReadyCallba
     lateinit var databaseHelper: DatabaseHelper
     private val binding get() = mapFragmentBinding!!
     private var clicked = false
-    private var usePosition = false
+    private var canUsePosition = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
-        this.usePosition = usePositionPermission
-        pageViewModel = ViewModelProvider(this).get(PageViewModel::class.java).apply {
+        this.canUsePosition = canUsePositionPermission
+        this.pageViewModel = ViewModelProvider(this)[PageViewModel::class.java].apply {
             setIndex(arguments?.getInt(ARG_SECTION_NUMBER) ?: 1)
         }
-        databaseHelper = DatabaseHelper(requireContext())
-
+        this.databaseHelper = DatabaseHelper(requireContext())
     }
-
 
     @SuppressLint("MissingPermission")
     override fun onCreateView(
@@ -77,18 +73,17 @@ class MapFragment(private val usePositionPermission: Boolean) : OnMapReadyCallba
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        mapFragmentBinding = MapFragmentBinding.inflate(inflater, container, false)
-        mapFragmentBinding!!.gotoFab.hide()
+        this.mapFragmentBinding = MapFragmentBinding.inflate(inflater, container, false)
+        this.mapFragmentBinding!!.gotoFab.hide()
 
-
-        //Toast.makeText(requireContext(), "Sto creando!", //Toast.LENGTH_SHORT).show()
         val mapFragment =
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment? //IMPORTANTE CHE SIA CHILD E NON PARENT
         mapFragment?.getMapAsync(this@MapFragment)
 
-        if (!usePositionPermission) mapFragmentBinding!!.gpsFab.hide()
-        mapFragmentBinding!!.gpsFab.setOnClickListener {
-            if (!usePositionPermission){
+        if (!canUsePositionPermission) mapFragmentBinding!!.gpsFab.hide()
+        this.mapFragmentBinding!!.gpsFab.setOnClickListener {
+            if (!canUsePositionPermission)
+            {
                 Toast.makeText(this@MapFragment.context, "Permesso posizione negato", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
@@ -107,16 +102,13 @@ class MapFragment(private val usePositionPermission: Boolean) : OnMapReadyCallba
                 }
             }
         }
-
         return binding.root
     }
 
-
-    companion object {
+    companion object
+    {
 
         private const val ARG_SECTION_NUMBER = "section_number"
-
-        @JvmStatic
         fun newInstance(sectionNumber: Int, usePosition: Boolean): MapFragment {
             return MapFragment(usePosition).apply {
                 arguments = Bundle().apply {
@@ -126,12 +118,10 @@ class MapFragment(private val usePositionPermission: Boolean) : OnMapReadyCallba
         }
     }
 
-
-    override fun onMapReady(googleMap: GoogleMap) {
-
-
+    override fun onMapReady(googleMap: GoogleMap)
+    {
         this.googleMap = googleMap
-        if (usePositionPermission) this.googleMap.isMyLocationEnabled = true
+        if (canUsePositionPermission) this.googleMap.isMyLocationEnabled = true
         when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_NO -> {
                 googleMap.setMapStyle(MapStyleOptions(resources.getString(R.string.style_json_light)))
@@ -143,12 +133,11 @@ class MapFragment(private val usePositionPermission: Boolean) : OnMapReadyCallba
 
         this.googleMap.setOnMarkerDragListener(object : OnMarkerDragListener {
             override fun onMarkerDragStart(marker: Marker) {
-
             }
 
             override fun onMarkerDrag(marker: Marker) {}
             override fun onMarkerDragEnd(marker: Marker) {
-                currentMarker = marker //serve per aggiornare la posizione
+                currentMarker = marker //Serve per aggiornare la posizione
                 databaseHelper.markerCoordinatesUpdate(currentMarker!!)
             }
         })
@@ -158,9 +147,7 @@ class MapFragment(private val usePositionPermission: Boolean) : OnMapReadyCallba
             override fun getInfoWindow(marker: Marker): View {
 
                 val info = LinearLayout(this@MapFragment.context)
-
-                info.background =
-                    ResourcesCompat.getDrawable(resources, R.drawable.ic_rounded_rectangle, null)
+                info.background = ResourcesCompat.getDrawable(resources, R.drawable.ic_rounded_rectangle, null)
                 info.setPadding(24)
                 info.clipToOutline = true
                 info.orientation = LinearLayout.VERTICAL
@@ -180,7 +167,7 @@ class MapFragment(private val usePositionPermission: Boolean) : OnMapReadyCallba
                 snippet.setTextColor(Color.GRAY)
                 snippet.gravity = Gravity.CENTER
                 snippet.textSize = 13F
-                snippet.isVisible = true //debug
+                snippet.isVisible = false //debug
                 info.addView(title)
                 info.addView(snippet)
 
@@ -200,7 +187,7 @@ class MapFragment(private val usePositionPermission: Boolean) : OnMapReadyCallba
             currentMarker = it
             clicked = false
             modificaPunto(it)
-           // setNullAndHide() //todo test
+            setNullAndHide() //todo test
         }
 
         this.googleMap.setOnInfoWindowClickListener {
@@ -223,14 +210,11 @@ class MapFragment(private val usePositionPermission: Boolean) : OnMapReadyCallba
             for (t in markersList) {
                 val prop = t.snippet!!.split("#")
 
-
-                val id = prop[0]
+                val id = prop[0] //Non utilizzato ma rende chiara la situazione
                 val color = prop[1]
                 val type = prop[2]
 
                 Toast.makeText(requireContext(), "Colore: $color Tipo: $type", Toast.LENGTH_LONG).show()
-                /*val color = "#" + t.snippet!!.substringAfter("#")
-                val type =  t.snippet!!.substringBefore("#")*/
 
                 this.googleMap.addMarker(
                     t.icon(
@@ -242,7 +226,6 @@ class MapFragment(private val usePositionPermission: Boolean) : OnMapReadyCallba
                     )
                         .snippet(t.snippet)
                 )
-                ////Toast.makeText(requireContext(), type, //Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -254,13 +237,7 @@ class MapFragment(private val usePositionPermission: Boolean) : OnMapReadyCallba
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+            //Ho già chiesto il permesso, se non accetta l'applicazione funzionerà in modalità senza tracciamento
             return
         }
 
@@ -272,8 +249,6 @@ class MapFragment(private val usePositionPermission: Boolean) : OnMapReadyCallba
             }
             currentMarker = it
             mapFragmentBinding!!.gotoFab.show()
-            val markerName = it.title
-            ////Toast.makeText(requireContext(), "Clicked location is $markerName", //Toast.LENGTH_SHORT).show()
             false
         }
 
@@ -389,8 +364,7 @@ class MapFragment(private val usePositionPermission: Boolean) : OnMapReadyCallba
                 contentValues.put(COL_NAME, marker.title)
                 contentValues.put(COL_LATITUDE, marker.position.latitude)
                 contentValues.put(COL_LONGITUDE, marker.position.longitude)
-                contentValues.put(COL_TYPE_NAME_COLOR, rb.tooltipText.toString()) //todo test
-                ////Toast.makeText(requireContext(), "Testo: " + rb.tooltipText.toString().substringAfter("#"), //Toast.LENGTH_SHORT).show()
+                contentValues.put(COL_TYPE_NAME_COLOR, rb.tooltipText.toString())
                 val new_id: Int = databaseHelper.insertMarker(contentValues)
                 marker.snippet("$new_id#$color#$type")
 
