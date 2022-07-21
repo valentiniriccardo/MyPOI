@@ -43,7 +43,6 @@ import com.valentini.mypoi.R.font.inter_bold
 import com.valentini.mypoi.R.id.options_list
 import com.valentini.mypoi.database.*
 import com.valentini.mypoi.databinding.MapFragmentBinding
-import com.valentini.mypoi.databinding.MyplacesFragmentBinding
 import java.util.*
 
 
@@ -58,7 +57,6 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
     private val binding get() = mapFragmentBinding!!
     private var clicked = false
     private var canUsePosition = false
-    private var myplacesFragmentBinding: MyplacesFragmentBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -138,12 +136,17 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
         }
 
         this.googleMap.setOnMarkerDragListener(object : OnMarkerDragListener {
+
+            lateinit var oldMarker : Marker
+
             override fun onMarkerDragStart(marker: Marker) {
+                oldMarker = currentMarker!!
             }
 
             override fun onMarkerDrag(marker: Marker) {}
             override fun onMarkerDragEnd(marker: Marker) {
                 currentMarker = marker //Serve per aggiornare la posizione
+                (activity as MainActivity).updateMarkerInList(oldMarker, currentMarker!!)
                 databaseHelper.markerCoordinatesUpdate(currentMarker!!)
             }
         })
@@ -193,7 +196,7 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
             currentMarker = it
             clicked = false
             modificaPunto(it)
-            setNullAndHide() //todo test
+            //setNullAndHide() //todo test
         }
 
         this.googleMap.setOnInfoWindowClickListener {
@@ -230,7 +233,7 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
                                 type, "drawable", requireActivity().applicationContext.packageName
                             ), Color.parseColor("#$color")))
                         .snippet(t.snippet))
-                (activity as MainActivity).addMarkerToList(m!!)
+                (activity as MainActivity).insertMarkerInList(m!!)
             }
         }
 
@@ -382,7 +385,7 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
                         ), 16.0f
                     ), 2000, null
                 )
-                (activity as MainActivity).updateRecyclerView(new_marker!!)
+                (activity as MainActivity).insertMarkerInList(new_marker!!)
             }
         }
 
@@ -426,9 +429,6 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
         //Toast.makeText(requireContext(), "$viewId + ${R.id.rb_mod_casa}", Toast.LENGTH_LONG).show()
         builder.setPositiveButton("OK") { dialog, which -> // send data from the
 
-
-
-
             //name_editText.setText("This sets the text.", TextView.BufferType.EDITABLE)
 
             name_editText.isSingleLine = true
@@ -441,8 +441,8 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
                 val color = rb.tooltipText.toString().split("#")[0]
                 val type = rb.tooltipText.toString().split("#")[1]
 
-                oldmarker.remove()
-                val marker = MarkerOptions().position(LatLng(oldmarker.position.latitude, oldmarker.position.longitude))
+                oldmarker.isVisible = false
+                val markeroptions = MarkerOptions().position(LatLng(oldmarker.position.latitude, oldmarker.position.longitude))
                     .icon(
                         bitmapDescriptorFromVector(
                             resources.getIdentifier(
@@ -453,18 +453,21 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
                     .title(name_editText.text.toString())
                     .snippet("$id#$color#$type")
                 val contentValues = ContentValues()
-                contentValues.put(COL_NAME, marker.title)
-                contentValues.put(COL_ID, marker.snippet!!.substringBefore("#"))
+                contentValues.put(COL_NAME, markeroptions.title)
+                contentValues.put(COL_ID, markeroptions.snippet!!.substringBefore("#"))
                 contentValues.put(COL_TYPE_NAME_COLOR, rb.tooltipText.toString()) //todo test
                 ////Toast.makeText(requireContext(), "Testo: " + rb.tooltipText.toString().substringAfter("#"), //Toast.LENGTH_SHORT).show()
-                databaseHelper.markerDataUpdate(googleMap.addMarker(marker)!!)
+                val newmarker = googleMap.addMarker(markeroptions)
+                databaseHelper.markerDataUpdate(newmarker!!)
 
+                (activity as MainActivity).updateMarkerInList(oldmarker, newmarker)
+                oldmarker.remove()
 
                 googleMap.animateCamera(
                     CameraUpdateFactory.newLatLngZoom(
                         LatLng(
-                            marker.position.latitude,
-                            marker.position.longitude
+                            newmarker.position.latitude,
+                            newmarker.position.longitude
                         ), 16.0f
                     ), 1000, null
                 )
@@ -472,9 +475,11 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
         }
 
         builder.setNeutralButton("Elimina") { dialog, which ->
-            currentMarker!!.remove()
+            currentMarker?.isVisible = false
             clicked = false
             databaseHelper.markerRemove(currentMarker!!)
+            (activity as MainActivity).removeMarkerInList(currentMarker!!)
+            currentMarker!!.remove()
             setNullAndHide()
         }
 

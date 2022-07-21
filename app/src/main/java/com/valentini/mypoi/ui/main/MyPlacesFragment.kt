@@ -1,12 +1,7 @@
 package com.valentini.mypoi.ui.main
 
-import MyPlacesRecyclerAdapter
-import android.graphics.Color
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.*
-import android.widget.RelativeLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -23,7 +18,7 @@ open class MyPlacesFragment : Fragment() {
     private lateinit var pageViewModel: PageViewModel
     private var myplacesFragmentBinding: MyplacesFragmentBinding? = null //todo aggiustare ordine
 
-    private lateinit var privatePlacesList  : ArrayList<Marker>
+    //private lateinit var privatePlacesList  : ArrayList<Marker>
 
     private val binding get() = myplacesFragmentBinding!!
 
@@ -82,8 +77,8 @@ open class MyPlacesFragment : Fragment() {
             override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
         })
 
-        privatePlacesList = (activity as MainActivity).markerListTest
-        recyclerView.adapter = MarkerAdapter(privatePlacesList)
+        //privatePlacesList =
+        recyclerView.adapter = MarkerAdapter((activity as MainActivity).markerListTest)
 
     }
 
@@ -124,14 +119,34 @@ open class MyPlacesFragment : Fragment() {
         myplacesFragmentBinding = null
     }
 
-    open fun updateRecyclerView(marker : Marker)
+    open fun insertInRecycleView(markerIndex: Int)
     {
-        privatePlacesList.add(marker)
+        //privatePlacesList.add(marker)
 
         val recyclerView: RecyclerView = requireActivity().findViewById(R.id.markers_viewlist)
-        recyclerView.adapter!!.notifyItemInserted(recyclerView.adapter!!.itemCount)
+        recyclerView.adapter!!.notifyItemInserted(markerIndex)
         //recyclerView.adapter!!.notifyDataSetChanged()
     }
-    //todo
+
+    open fun removeFromRecycleView(markerIndex : Int)
+    {
+        //val indexOfRemovedMarker = (activity as MainActivity).markerListTest.indexOf(marker)
+        //(activity as MainActivity).markerListTest.remove(marker)
+
+        val recyclerView: RecyclerView = requireActivity().findViewById(R.id.markers_viewlist)
+        recyclerView.adapter!!.notifyItemRemoved(markerIndex)
+        //recyclerView.adapter!!.notifyDataSetChanged()
+    }
+
+    open fun updateInRecycleView(oldindex : Int)
+    {
+        //val indexOfItemChanged = privatePlacesList.indexOf(oldmarker)
+        //privatePlacesList.set(oldindex, newmarker)
+
+        val recyclerView: RecyclerView = requireActivity().findViewById(R.id.markers_viewlist)
+        recyclerView.adapter!!.notifyItemChanged(oldindex)
+        //recyclerView.adapter!!.notifyDataSetChanged()
+    }
+
 
 }

@@ -14,9 +14,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.valentini.mypoi.database.DatabaseHelper
 import com.valentini.mypoi.databinding.ActivityMainBinding
-import com.valentini.mypoi.databinding.MyplacesFragmentBinding
 import com.valentini.mypoi.ui.main.MyPlacesFragment
 import com.valentini.mypoi.ui.main.SectionsPagerAdapter
+import java.lang.RuntimeException
 
 
 class MainActivity : AppCompatActivity() {
@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity() {
 
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var myPlacesFragment: MyplacesFragmentBinding
     lateinit var databaseHelper: DatabaseHelper
     val markerListTest = arrayListOf<Marker>()
 
@@ -45,18 +44,77 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun updateRecyclerView(marker: Marker)
+    private fun insertInRecycleView(markerIndex: Int)
     {
         val myFragment = MyPlacesFragment()
+        try
+        {
+
         supportFragmentManager
             .beginTransaction()
             .add(R.id.constraintlayout, myFragment)
-            .commitAllowingStateLoss()
-        supportFragmentManager.executePendingTransactions() //FONDAMENTALE
+            .commitNowAllowingStateLoss()
+
+            supportFragmentManager.executePendingTransactions() //FONDAMENTALE
+        } catch (ex : RuntimeException)
+        {
+
+        }
 
 
         //this is fragment method, we call it from activity
-            myFragment.updateRecyclerView(marker)
+
+        if (myFragment.isVisible) {
+            myFragment.insertInRecycleView(markerIndex)
+        }
+
+    }
+
+    private fun removeFromRecycleView(markerIndex: Int)
+    {
+        val myFragment = MyPlacesFragment()
+        try
+        {
+
+            supportFragmentManager
+                .beginTransaction()
+                .add(R.id.constraintlayout, myFragment)
+                .commitNowAllowingStateLoss()
+
+            supportFragmentManager.executePendingTransactions() //FONDAMENTALE
+        } catch (ex : RuntimeException)
+        {
+
+        }
+
+
+        if (myFragment.isVisible) {
+            myFragment.removeFromRecycleView(markerIndex)
+        }
+
+    }
+
+    private fun updateInRecycleView(markerIndex: Int)
+    {
+        val myFragment = MyPlacesFragment()
+        try
+        {
+
+            supportFragmentManager
+                .beginTransaction()
+                .add(R.id.constraintlayout, myFragment)
+                .commitNowAllowingStateLoss()
+
+            supportFragmentManager.executePendingTransactions() //FONDAMENTALE
+        } catch (ex : RuntimeException)
+        {
+
+        }
+
+
+        if (myFragment.isAdded) {
+            myFragment.updateInRecycleView(markerIndex)
+        }
 
     }
 
@@ -65,9 +123,23 @@ class MainActivity : AppCompatActivity() {
         return markerListTest
     }
 
-    fun addMarkerToList(marker: Marker)
+    fun insertMarkerInList(marker: Marker)
     {
         markerListTest.add(marker)
+        insertInRecycleView(markerListTest.indexOf(marker))
+    }
+
+    fun removeMarkerInList(marker: Marker)
+    {
+        removeFromRecycleView(markerListTest.indexOf(marker))
+        markerListTest.remove(marker)
+    }
+
+    fun updateMarkerInList(oldmarker: Marker, newmarker: Marker)
+    {
+        val index = markerListTest.indexOf(oldmarker)
+        markerListTest[index] = newmarker
+        updateInRecycleView(index)
     }
 
 
