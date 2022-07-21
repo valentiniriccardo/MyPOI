@@ -21,7 +21,7 @@ open class UtilityClass {
             activity.windowManager.defaultDisplay.getMetrics(displaymetrics)
             val value = activity.resources.displayMetrics.density
             val vectorDrawable = ContextCompat.getDrawable(activity.baseContext, res)
-            Toast.makeText(activity.baseContext, "" + value, Toast.LENGTH_LONG).show()
+            //Toast.makeText(activity.baseContext, "" + value, Toast.LENGTH_LONG).show()
             vectorDrawable!!.setColorFilter(color, PorterDuff.Mode.MULTIPLY)
             vectorDrawable.setBounds(
                 0,

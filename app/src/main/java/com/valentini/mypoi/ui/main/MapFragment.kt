@@ -382,7 +382,7 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
                         ), 16.0f
                     ), 2000, null
                 )
-                (activity as MainActivity).updateRecyclerView()
+                (activity as MainActivity).updateRecyclerView(new_marker!!)
             }
         }
 

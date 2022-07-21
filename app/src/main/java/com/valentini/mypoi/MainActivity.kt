@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun updateRecyclerView()
+    fun updateRecyclerView(marker: Marker)
     {
         val myFragment = MyPlacesFragment()
         supportFragmentManager
@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
 
 
         //this is fragment method, we call it from activity
-            myFragment.updateRecyclerView()
+            myFragment.updateRecyclerView(marker)
 
     }
 

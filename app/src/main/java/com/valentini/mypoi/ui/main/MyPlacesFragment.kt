@@ -23,6 +23,7 @@ open class MyPlacesFragment : Fragment() {
     private lateinit var pageViewModel: PageViewModel
     private var myplacesFragmentBinding: MyplacesFragmentBinding? = null //todo aggiustare ordine
 
+    private lateinit var privatePlacesList  : ArrayList<Marker>
 
     private val binding get() = myplacesFragmentBinding!!
 
@@ -81,7 +82,8 @@ open class MyPlacesFragment : Fragment() {
             override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
         })
 
-        recyclerView.adapter = MarkerAdapter((activity as MainActivity).markerListTest)
+        privatePlacesList = (activity as MainActivity).markerListTest
+        recyclerView.adapter = MarkerAdapter(privatePlacesList)
 
     }
 
@@ -122,12 +124,14 @@ open class MyPlacesFragment : Fragment() {
         myplacesFragmentBinding = null
     }
 
-    open fun updateRecyclerView()
+    open fun updateRecyclerView(marker : Marker)
     {
-        //Toast.makeText(requireActivity().baseContext, "Ciao!", Toast.LENGTH_LONG).show()
+        privatePlacesList.add(marker)
+
         val recyclerView: RecyclerView = requireActivity().findViewById(R.id.markers_viewlist)
-        recyclerView.setBackgroundColor(Color.BLUE)
-    //todo
+        recyclerView.adapter!!.notifyItemInserted(recyclerView.adapter!!.itemCount)
+        //recyclerView.adapter!!.notifyDataSetChanged()
     }
+    //todo
 
 }
