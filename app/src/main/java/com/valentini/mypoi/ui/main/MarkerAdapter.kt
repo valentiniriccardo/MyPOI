@@ -1,6 +1,10 @@
 package com.valentini.mypoi.ui.main
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.Color.parseColor
+import android.graphics.PorterDuff
+import android.view.Display
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,7 +49,10 @@ open class MarkerAdapter(context: Context, private val markerList: ArrayList<Mar
             val image = context.resources.getIdentifier(
                         type, "drawable", context.applicationContext.packageName)
                 //    ), Color.parseColor("#$color")))
-            markerIconView.background = ContextCompat.getDrawable(this.context, image)
+
+            val drawable = ContextCompat.getDrawable(this.context, image)
+            drawable!!.setColorFilter(parseColor("#$color"), PorterDuff.Mode.MULTIPLY)
+            markerIconView.background = drawable
         }
     }
 
