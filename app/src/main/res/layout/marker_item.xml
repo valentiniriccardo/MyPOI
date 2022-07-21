@@ -24,12 +24,12 @@
 
     <TextView
         android:id="@+id/marker_label_name"
-        android:layout_width="190dp"
+        android:layout_width="228dp"
         android:layout_height="20dp"
         android:layout_margin="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:fontFamily="@font/inter_bold"
+        android:fontFamily="@font/inter_black"
         android:text="Nome posto"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,12 +37,12 @@
 
     <TextView
         android:id="@+id/marker_label_type"
-        android:layout_width="162dp"
+        android:layout_width="228dp"
         android:layout_height="20dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:fontFamily="@font/inter_thin"
+        android:fontFamily="@font/inter_bold"
         android:text="Tipo posto"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -51,16 +51,12 @@
 
     <ImageView
         android:id="@+id/marker_type_logo"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/marker_label_longitude"
-        app:layout_constraintStart_toEndOf="@+id/marker_label_type"
-        app:layout_constraintTop_toBottomOf="@+id/marker_label_name"
+        app:layout_constraintStart_toEndOf="@+id/marker_label_name"
+        app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@drawable/ic_cloud" />
 
     <TextView
@@ -70,27 +66,34 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:fontFamily="@font/inter_light"
+        android:fontFamily="@font/jetbrains_mono_medium"
+        android:gravity="fill_horizontal|fill_vertical"
         android:text="Lat: "
+        android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/marker_label_name"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/marker_type_logo"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SmallSp" />
 
     <TextView
         android:id="@+id/marker_label_longitude"
         android:layout_width="0dp"
         android:layout_height="20dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:fontFamily="@font/inter_light"
+        android:fontFamily="@font/jetbrains_mono_medium"
+        android:gravity="fill_horizontal|fill_vertical"
         android:text="Long:"
+        android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/marker_type_logo"
         app:layout_constraintTop_toBottomOf="@+id/marker_label_latitude"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="SmallSp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
