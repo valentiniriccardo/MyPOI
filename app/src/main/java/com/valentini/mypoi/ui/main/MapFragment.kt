@@ -37,11 +37,13 @@ import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.valentini.mypoi.MainActivity
 import com.valentini.mypoi.R
 import com.valentini.mypoi.R.font.inter_bold
 import com.valentini.mypoi.R.id.options_list
 import com.valentini.mypoi.database.*
 import com.valentini.mypoi.databinding.MapFragmentBinding
+import com.valentini.mypoi.databinding.MyplacesFragmentBinding
 import java.util.*
 
 
@@ -56,6 +58,7 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
     private val binding get() = mapFragmentBinding!!
     private var clicked = false
     private var canUsePosition = false
+    private var myplacesFragmentBinding: MyplacesFragmentBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -76,6 +79,9 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
         this.mapFragmentBinding = MapFragmentBinding.inflate(inflater, container, false)
         this.mapFragmentBinding!!.gotoFab.hide()
 
+
+
+
         val mapFragment =
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment? //IMPORTANTE CHE SIA CHILD E NON PARENT
         mapFragment?.getMapAsync(this@MapFragment)
@@ -84,7 +90,7 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
         this.mapFragmentBinding!!.gpsFab.setOnClickListener {
             if (!canUsePositionPermission)
             {
-                Toast.makeText(this@MapFragment.context, "Permesso posizione negato", Toast.LENGTH_LONG).show()
+                //Toast.makeText(this@MapFragment.context, "Permesso posizione negato", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
@@ -214,18 +220,17 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
                 val color = prop[1]
                 val type = prop[2]
 
-                Toast.makeText(requireContext(), "Colore: $color Tipo: $type", Toast.LENGTH_LONG).show()
 
-                this.googleMap.addMarker(
+                //Toast.makeText(requireContext(), "Colore: $color Tipo: $type", Toast.LENGTH_LONG).show()
+
+                val m = this.googleMap.addMarker(
                     t.icon(
                         bitmapDescriptorFromVector(
                             resources.getIdentifier(
                                 type, "drawable", requireActivity().applicationContext.packageName
-                            ), Color.parseColor("#$color")
-                        )
-                    )
-                        .snippet(t.snippet)
-                )
+                            ), Color.parseColor("#$color")))
+                        .snippet(t.snippet))
+                (activity as MainActivity).addMarkerToList(m!!)
             }
         }
 
@@ -310,7 +315,7 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
         requireActivity().windowManager.defaultDisplay.getMetrics(displaymetrics)
         val value = resources.displayMetrics.density
         val vectorDrawable = ContextCompat.getDrawable(this.requireContext(), res)
-        Toast.makeText(requireContext(), "" + value, Toast.LENGTH_LONG).show()
+        //Toast.makeText(requireContext(), "" + value, Toast.LENGTH_LONG).show()
         vectorDrawable!!.setColorFilter(color, PorterDuff.Mode.MULTIPLY)
         vectorDrawable.setBounds(
             0,
@@ -368,7 +373,7 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
                 val new_id: Int = databaseHelper.insertMarker(contentValues)
                 marker.snippet("$new_id#$color#$type")
 
-                googleMap.addMarker(marker)
+                val new_marker = googleMap.addMarker(marker)
                 googleMap.animateCamera(
                     CameraUpdateFactory.newLatLngZoom(
                         LatLng(
@@ -377,6 +382,7 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
                         ), 16.0f
                     ), 2000, null
                 )
+                (activity as MainActivity).updateRecyclerView()
             }
         }
 
@@ -417,7 +423,7 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
         val checked_radio_button = customLayout.findViewById<RadioButton>(viewId!!)
         checked_radio_button?.isChecked = true
 
-        Toast.makeText(requireContext(), "$viewId + ${R.id.rb_mod_casa}", Toast.LENGTH_LONG).show()
+        //Toast.makeText(requireContext(), "$viewId + ${R.id.rb_mod_casa}", Toast.LENGTH_LONG).show()
         builder.setPositiveButton("OK") { dialog, which -> // send data from the
 
 

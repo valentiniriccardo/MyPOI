@@ -4,16 +4,18 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
+import com.google.android.gms.maps.model.Marker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.valentini.mypoi.database.DatabaseHelper
 import com.valentini.mypoi.databinding.ActivityMainBinding
+import com.valentini.mypoi.databinding.MyplacesFragmentBinding
+import com.valentini.mypoi.ui.main.MyPlacesFragment
 import com.valentini.mypoi.ui.main.SectionsPagerAdapter
 
 
@@ -22,9 +24,11 @@ class MainActivity : AppCompatActivity() {
     private val FINELOCATION_PERMISSIONCODE = 1
     private var usePosition : Boolean = false
 
-    private lateinit var binding: ActivityMainBinding
-    lateinit var databaseHelper: DatabaseHelper
 
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var myPlacesFragment: MyplacesFragmentBinding
+    lateinit var databaseHelper: DatabaseHelper
+    val markerListTest = arrayListOf<Marker>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +42,34 @@ class MainActivity : AppCompatActivity() {
             requestFineLocationPermission()
         }
 
+
     }
+
+    fun updateRecyclerView()
+    {
+        val myFragment = MyPlacesFragment()
+        supportFragmentManager
+            .beginTransaction()
+            .add(R.id.constraintlayout, myFragment)
+            .commitAllowingStateLoss()
+        supportFragmentManager.executePendingTransactions() //FONDAMENTALE
+
+
+        //this is fragment method, we call it from activity
+            myFragment.updateRecyclerView()
+
+    }
+
+    fun getMarkersList(): ArrayList<Marker>
+    {
+        return markerListTest
+    }
+
+    fun addMarkerToList(marker: Marker)
+    {
+        markerListTest.add(marker)
+    }
+
 
     private fun createEverything(usePosition: Boolean) {
         databaseHelper = DatabaseHelper(baseContext)
@@ -57,6 +88,8 @@ class MainActivity : AppCompatActivity() {
             goToMapTab()
         }
     }
+
+
 
     private fun requestFineLocationPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION))
@@ -87,10 +120,10 @@ class MainActivity : AppCompatActivity() {
         {
             usePosition =
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this@MainActivity, "Permission fine granted", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this@MainActivity, "Permission fine granted", Toast.LENGTH_SHORT).show()
                     true
                 } else {
-                    Toast.makeText(this@MainActivity, "Permesso posizione non ottenuto", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this@MainActivity, "Permesso posizione non ottenuto", Toast.LENGTH_SHORT).show()
                     false
                 }
 
