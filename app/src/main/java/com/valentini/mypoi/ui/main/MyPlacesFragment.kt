@@ -78,7 +78,7 @@ open class MyPlacesFragment : Fragment() {
         })
 
         //privatePlacesList =
-        recyclerView.adapter = MarkerAdapter((activity as MainActivity).markerListTest)
+        recyclerView.adapter = MarkerAdapter(requireContext(), (activity as MainActivity).markerListTest)
 
     }
 

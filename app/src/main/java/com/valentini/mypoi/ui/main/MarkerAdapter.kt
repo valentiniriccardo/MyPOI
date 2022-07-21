@@ -1,24 +1,34 @@
 package com.valentini.mypoi.ui.main
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.model.Marker
+import com.google.android.material.internal.ContextUtils.getActivity
 import com.valentini.mypoi.R
 
-class MarkerAdapter(private val markerList: ArrayList<Marker>) :
+open class MarkerAdapter(context: Context, private val markerList: ArrayList<Marker>) :
     RecyclerView.Adapter<MarkerAdapter.MarkerViewHolder>() {
 
+    private val context = context
+
+
     // Describes an item view and its place within the RecyclerView
-    class MarkerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class MarkerViewHolder(context: Context, itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val markerTitleTextView: TextView = itemView.findViewById(R.id.marker_label_name)
         private val markerTypeTextView: TextView = itemView.findViewById(R.id.marker_label_type)
         private val markerLatTextView: TextView = itemView.findViewById(R.id.marker_label_latitude)
         private val markerLongTextView: TextView = itemView.findViewById(R.id.marker_label_longitude)
+        private val markerIconView: ImageView = itemView.findViewById(R.id.marker_type_logo)
 
+        private val context = context
 
         fun bind(marker: Marker) {
 
@@ -32,7 +42,10 @@ class MarkerAdapter(private val markerList: ArrayList<Marker>) :
             markerTypeTextView.text = type
             markerLatTextView.text = "Lat: ${marker.position.latitude}"
             markerLongTextView.text = "Lat: ${marker.position.longitude}"
-
+            val image = context.resources.getIdentifier(
+                        type, "drawable", context.applicationContext.packageName)
+                //    ), Color.parseColor("#$color")))
+            markerIconView.background = ContextCompat.getDrawable(this.context, image)
         }
     }
 
@@ -41,7 +54,7 @@ class MarkerAdapter(private val markerList: ArrayList<Marker>) :
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.marker_item, parent, false)
 
-        return MarkerViewHolder(view)
+        return MarkerViewHolder(context, view)
     }
 
     // Returns size of data list
