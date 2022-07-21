@@ -85,7 +85,7 @@
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/jetbrains_mono_medium"
         android:gravity="fill_horizontal|fill_vertical"
-        android:text="Long:"
+        android:text="Lon:"
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
