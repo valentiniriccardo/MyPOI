@@ -58,8 +58,19 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
     private var clicked = false
     private var canUsePosition = false
 
-    override fun onCreate(savedInstanceState: Bundle?)
-    {
+    companion object {
+
+        private const val ARG_SECTION_NUMBER = "section_number"
+        fun newInstance(sectionNumber: Int, usePosition: Boolean): MapFragment {
+            return MapFragment(usePosition).apply {
+                arguments = Bundle().apply {
+                    putInt(ARG_SECTION_NUMBER, sectionNumber)
+                }
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.canUsePosition = canUsePositionPermission
         this.pageViewModel = ViewModelProvider(this)[PageViewModel::class.java].apply {
@@ -78,16 +89,13 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
         this.mapFragmentBinding!!.gotoFab.hide()
 
 
-
-
         val mapFragment =
             childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment? //IMPORTANTE CHE SIA CHILD E NON PARENT
         mapFragment?.getMapAsync(this@MapFragment)
 
         if (!canUsePositionPermission) mapFragmentBinding!!.gpsFab.hide()
         this.mapFragmentBinding!!.gpsFab.setOnClickListener {
-            if (!canUsePositionPermission)
-            {
+            if (!canUsePositionPermission) {
                 //Toast.makeText(this@MapFragment.context, "Permesso posizione negato", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
@@ -109,21 +117,9 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
         return binding.root
     }
 
-    companion object
-    {
 
-        private const val ARG_SECTION_NUMBER = "section_number"
-        fun newInstance(sectionNumber: Int, usePosition: Boolean): MapFragment {
-            return MapFragment(usePosition).apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_SECTION_NUMBER, sectionNumber)
-                }
-            }
-        }
-    }
-
-    override fun onMapReady(googleMap: GoogleMap)
-    {
+    @SuppressLint("ResourceType")
+    override fun onMapReady(googleMap: GoogleMap) {
         this.googleMap = googleMap
         if (canUsePositionPermission) this.googleMap.isMyLocationEnabled = true
         when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
@@ -135,9 +131,10 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
             }
         }
 
+
         this.googleMap.setOnMarkerDragListener(object : OnMarkerDragListener {
 
-            lateinit var oldMarker : Marker
+            lateinit var oldMarker: Marker
 
             override fun onMarkerDragStart(marker: Marker) {
                 oldMarker = currentMarker!!
@@ -231,8 +228,11 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
                         bitmapDescriptorFromVector(
                             resources.getIdentifier(
                                 type, "drawable", requireActivity().applicationContext.packageName
-                            ), Color.parseColor("#$color")))
-                        .snippet(t.snippet))
+                            ), Color.parseColor("#$color")
+                        )
+                    )
+                        .snippet(t.snippet)
+                )
                 (activity as MainActivity).insertMarkerInList(m!!)
             }
         }
@@ -258,23 +258,6 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
             currentMarker = it
             mapFragmentBinding!!.gotoFab.show()
             false
-        }
-
-
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-            location?.let {
-                googleMap.animateCamera(
-                    CameraUpdateFactory.newLatLngZoom(
-                        LatLng(
-                            location.latitude,
-                            location.longitude
-                        ), 13.0f
-                    ), 2000, null
-                )
-            } ?: kotlin.run {
-                // Handle Null case or Request periodic location update https://developer.android.com/training/location/receive-location-updates
-            }
         }
 
         this.googleMap.uiSettings.isCompassEnabled = true
@@ -308,10 +291,46 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
             getMeToMarker(currentMarker!!)
         }
 
+        (activity as MainActivity).googleMapFragment = this@MapFragment
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+            location?.let {
+                googleMap.animateCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        LatLng(
+                            location.latitude,
+                            location.longitude
+                        ), 13.0f
+                    ), 2000, null
+                )
+            } ?: kotlin.run {
+                // Handle Null case or Request periodic location update https://developer.android.com/training/location/receive-location-updates
+            }
+        }
+
     }
 
     //2.815 oneplus
     //1.65 mi4a
+
 
     private fun bitmapDescriptorFromVector(res: Int, color: Int): BitmapDescriptor {
         val displaymetrics = DisplayMetrics()
@@ -400,7 +419,6 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
         dialog.show()
 
     }
-
 
 
     private fun modificaPunto(oldmarker: Marker) {

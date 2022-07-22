@@ -2,12 +2,14 @@ package com.valentini.mypoi.ui.main
 
 import android.os.Bundle
 import android.view.*
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLng
 import com.valentini.mypoi.MainActivity
 import com.valentini.mypoi.R
 import com.valentini.mypoi.databinding.MyplacesFragmentBinding
@@ -29,8 +31,6 @@ open class MyPlacesFragment : Fragment() {
         }
 
         //Toast.makeText(requireContext(), "" + (activity as MainActivity).getInt(), Toast.LENGTH_LONG).show()
-
-
 
 
     }
@@ -63,12 +63,15 @@ open class MyPlacesFragment : Fragment() {
             ): Boolean {
                 val childView = Recyclerview.findChildViewUnder(motionEvent.x, motionEvent.y)
                 if (childView != null && gestureDetector.onTouchEvent(motionEvent)) {
-                    val recyclerViewItemPosition = Recyclerview.getChildAdapterPosition(childView)
-                    Toast.makeText(
-                        requireActivity(),
-                        markerListTest[recyclerViewItemPosition].title,
-                        Toast.LENGTH_SHORT
-                    ).show()
+
+                    val lat = childView!!.findViewById<TextView>(R.id.marker_label_latitude).text.toString().split(" ")[1].replace(",", ".").toDouble()
+                    val long = childView!!.findViewById<TextView>(R.id.marker_label_longitude).text.toString().split(" ")[1].replace(",", ".").toDouble()
+
+                    Toast.makeText(requireContext(), "lat $lat long $long", Toast.LENGTH_LONG).show()
+
+                    (context as MainActivity).googleMapFragment.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lat, long), 13f))
+                    (context as MainActivity).binding.tabs.getTabAt(1)
+                        ?.select()
                 }
                 return false
             }
@@ -81,7 +84,6 @@ open class MyPlacesFragment : Fragment() {
         recyclerView.adapter = MarkerAdapter(requireContext(), (activity as MainActivity).markerListTest)
 
     }
-
 
 
     override fun onCreateView(
@@ -119,8 +121,7 @@ open class MyPlacesFragment : Fragment() {
         myplacesFragmentBinding = null
     }
 
-    open fun insertInRecycleView(markerIndex: Int)
-    {
+    open fun insertInRecycleView(markerIndex: Int) {
         //privatePlacesList.add(marker)
 
         val recyclerView: RecyclerView = requireActivity().findViewById(R.id.markers_viewlist)
@@ -128,8 +129,7 @@ open class MyPlacesFragment : Fragment() {
         //recyclerView.adapter!!.notifyDataSetChanged()
     }
 
-    open fun removeFromRecycleView(markerIndex : Int)
-    {
+    open fun removeFromRecycleView(markerIndex: Int) {
         //val indexOfRemovedMarker = (activity as MainActivity).markerListTest.indexOf(marker)
         //(activity as MainActivity).markerListTest.remove(marker)
 
@@ -138,8 +138,7 @@ open class MyPlacesFragment : Fragment() {
         //recyclerView.adapter!!.notifyDataSetChanged()
     }
 
-    open fun updateInRecycleView(oldindex : Int)
-    {
+    open fun updateInRecycleView(oldindex: Int) {
         //val indexOfItemChanged = privatePlacesList.indexOf(oldmarker)
         //privatePlacesList.set(oldindex, newmarker)
 

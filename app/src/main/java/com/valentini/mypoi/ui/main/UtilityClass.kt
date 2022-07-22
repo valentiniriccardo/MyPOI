@@ -1,12 +1,9 @@
 package com.valentini.mypoi.ui.main
 
-import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.PorterDuff
 import android.util.DisplayMetrics
-import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory

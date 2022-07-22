@@ -12,8 +12,9 @@ private val TAB_TITLES = arrayOf(
     R.string.tab_myplaces,
 )
 
-class SectionsPagerAdapter(private val context: Context, fm: FragmentManager,
-                           private var usePosition: Boolean
+class SectionsPagerAdapter(
+    private val context: Context, fm: FragmentManager,
+    private var usePosition: Boolean
 ) :
     FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
