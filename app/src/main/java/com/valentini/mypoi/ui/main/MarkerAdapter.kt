@@ -8,15 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
-import com.valentini.mypoi.MainActivity
 import com.valentini.mypoi.R
+import java.text.DecimalFormat
 
 open class MarkerAdapter(private val context: Context, private val markerList: ArrayList<Marker>) : RecyclerView.Adapter<MarkerAdapter.MarkerViewHolder>()
 {
@@ -44,8 +41,9 @@ open class MarkerAdapter(private val context: Context, private val markerList: A
 
             markerTitleTextView.text = marker.title
             markerTypeTextView.text = type
-            markerLatTextView.text = String.format("Lat: %.4f", marker.position.latitude)
-            markerLongTextView.text = String.format("Long: %.4f", marker.position.longitude)
+            val df = DecimalFormat("00.000")
+            markerLatTextView.text = String.format("Lat: ${df.format(marker.position.latitude)}")
+            markerLongTextView.text = String.format("Lon: ${df.format(marker.position.longitude)}")
 
             markerLayout.setOnClickListener(){
 

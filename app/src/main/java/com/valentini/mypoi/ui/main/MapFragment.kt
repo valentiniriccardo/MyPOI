@@ -356,15 +356,88 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
 
     private fun inserisciPunto(point: LatLng) {
 
+        val dialog1: AlertDialog = AlertDialog.Builder(context)
+            .setTitle(R.string.app_name)
+            .setPositiveButton(android.R.string.ok, null) //Set to null. We override the onclick
+            .setNegativeButton(android.R.string.cancel, null)
+            .create()
+        val customLayout: View = layoutInflater.inflate(R.layout.add_place_dialog, null)
+        dialog1.setView(customLayout)
+        val editText = customLayout.findViewById<EditText>(R.id.addplace_edittext)
+
+        dialog1.setOnShowListener {
+            val button_neg = (dialog1 as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE)
+            button_neg.setOnClickListener {
+                dialog1.dismiss()
+            }
+            val button_pos = (dialog1 as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
+            button_pos.setOnClickListener { // TODO Do something
+
+
+                //editText.isSingleLine = true
+
+                if (editText.text.toString() != "") {
+                    val rb = customLayout.findViewById<RadioButton>(
+                        customLayout.findViewById<RadioGroup>(options_list).checkedRadioButtonId
+                    )
+
+                    val color = rb.tooltipText.toString().substringBefore("#")
+                    val type = rb.tooltipText.toString().substringAfter("#")
+
+                    val marker = MarkerOptions().position(LatLng(point.latitude, point.longitude))
+                        .icon(
+                            bitmapDescriptorFromVector(
+                                resources.getIdentifier(
+                                    type, "drawable", requireActivity().applicationContext.packageName
+                                ), Color.parseColor("#$color")
+                            )
+                        )
+                        .title(editText.text.toString())
+
+
+                    val contentValues = ContentValues()
+                    contentValues.put(COL_NAME, marker.title)
+                    contentValues.put(COL_LATITUDE, marker.position.latitude)
+                    contentValues.put(COL_LONGITUDE, marker.position.longitude)
+                    contentValues.put(COL_TYPE_NAME_COLOR, rb.tooltipText.toString())
+                    val new_id: Int = databaseHelper.insertMarker(contentValues)
+                    marker.snippet("$new_id#$color#$type")
+
+                    val new_marker = googleMap.addMarker(marker)
+                    googleMap.animateCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            LatLng(
+                                marker.position.latitude,
+                                marker.position.longitude
+                            ), 16.0f
+                        ), 2000, null
+                    )
+                    (activity as MainActivity).insertMarkerInList(new_marker!!)
+                    dialog1.dismiss()
+                } else {
+                    Toast.makeText(requireContext(), "Il nome non può essere vuoto", Toast.LENGTH_LONG).show()
+                }
+            }
+
+        }
+        dialog1.show()
+
+
+       /*
         // Create an alert builder
         val builder = AlertDialog.Builder(requireContext()) //R.style.AlertDialogStyle)
 
         builder.setTitle("Nuova posizione")
+        builder.create()
 
         // set the custom layout
         val customLayout: View = layoutInflater.inflate(R.layout.add_place_dialog, null)
         builder.setView(customLayout)
+
+
+
         builder.setPositiveButton("OK") { dialog, which -> // send data from the
+
 
             val editText = customLayout.findViewById<EditText>(R.id.editText)
             editText.isSingleLine = true
@@ -387,6 +460,7 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
                     )
                     .title(editText.text.toString())
 
+
                 val contentValues = ContentValues()
                 contentValues.put(COL_NAME, marker.title)
                 contentValues.put(COL_LATITUDE, marker.position.latitude)
@@ -405,27 +479,124 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
                     ), 2000, null
                 )
                 (activity as MainActivity).insertMarkerInList(new_marker!!)
-            }
+                //dialog.dismiss()
+            } else
+            {
+                dialog.show()
+                Toast.makeText(requireContext(), "Fro", Toast.LENGTH_SHORT).show()
+           }
+
         }
+
 
 
         builder.setNegativeButton("Annulla") { dialog, which ->
             dialog.dismiss()
         }
 
+
+
         val dialog = builder.create()
 
         dialog.setCancelable(false)
-        dialog.show()
+        dialog.show()*/
+
 
     }
 
 
     private fun modificaPunto(oldmarker: Marker) {
 
+        val dialog1: AlertDialog = AlertDialog.Builder(context)
+            .setTitle(R.string.app_name)
+            .setPositiveButton(android.R.string.ok, null) //Set to null. We override the onclick
+            .setNegativeButton(android.R.string.cancel, null)
+            .setNeutralButton("Elimina", null)
+            .create()
+        val customLayout: View = layoutInflater.inflate(R.layout.modify_place_dialog, null)
+        dialog1.setView(customLayout)
+        val editText = customLayout.findViewById<EditText>(R.id.addplace_edittext)
+        editText.setText(oldmarker.title)
+
+        val id = this.resources.getIdentifier("R.id.rb_mod_" + oldmarker.snippet!!.split("#")[2], "id", requireActivity().packageName)
+
+        val viewId = context?.resources?.getIdentifier("rb_mod_" + oldmarker.snippet!!.split("#")[2], "id", context?.packageName)
+
+        val checked_radio_button = customLayout.findViewById<RadioButton>(viewId!!)
+        checked_radio_button?.isChecked = true
+
+        dialog1.setOnShowListener {
+            val button_neg = (dialog1 as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE)
+            button_neg.setOnClickListener {
+                dialog1.dismiss()
+            }
+
+            val button_neu = (dialog1 as AlertDialog).getButton(AlertDialog.BUTTON_NEUTRAL)
+            button_neu.setOnClickListener {
+                currentMarker?.isVisible = false
+                clicked = false
+                databaseHelper.markerRemove(currentMarker!!)
+                (activity as MainActivity).removeMarkerInList(currentMarker!!)
+                currentMarker!!.remove()
+                setNullAndHide()
+                dialog1.dismiss()
+            }
+
+            val button_pos = (dialog1 as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
+            button_pos.setOnClickListener { // TODO Do something
+
+
+                //editText.isSingleLine = true
+
+                if (editText.text.toString() != "") {
+                    val rb = customLayout.findViewById<RadioButton>(
+                        customLayout.findViewById<RadioGroup>(options_list).checkedRadioButtonId
+                    )
+                    val id_ = oldmarker.snippet!!.substringBefore("#")
+                    val color = rb.tooltipText.toString().split("#")[0]
+                    val type = rb.tooltipText.toString().split("#")[1]
+
+                    oldmarker.isVisible = false
+                    val markeroptions = MarkerOptions().position(LatLng(oldmarker.position.latitude, oldmarker.position.longitude))
+                        .icon(
+                            bitmapDescriptorFromVector(
+                                resources.getIdentifier(
+                                    type, "drawable", requireActivity().applicationContext.packageName
+                                ), Color.parseColor("#$color")
+                            )
+                        )
+                        .title(editText.text.toString())
+                        .snippet("$id_#$color#$type")
+                    val contentValues = ContentValues()
+                    contentValues.put(COL_NAME, markeroptions.title)
+                    contentValues.put(COL_ID, markeroptions.snippet!!.substringBefore("#"))
+                    contentValues.put(COL_TYPE_NAME_COLOR, rb.tooltipText.toString()) //todo test
+                    ////Toast.makeText(requireContext(), "Testo: " + rb.tooltipText.toString().substringAfter("#"), //Toast.LENGTH_SHORT).show()
+                    val newmarker = googleMap.addMarker(markeroptions)
+                    databaseHelper.markerDataUpdate(newmarker!!)
+
+                    (activity as MainActivity).updateMarkerInList(oldmarker, newmarker)
+                    oldmarker.remove()
+
+                    googleMap.animateCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            LatLng(
+                                newmarker.position.latitude,
+                                newmarker.position.longitude
+                            ), 16.0f
+                        ), 1000, null
+                    )
+                    dialog1.dismiss()
+                } else {
+                    Toast.makeText(requireContext(), "Il nome non può essere vuoto", Toast.LENGTH_LONG).show()
+                }
+            }
+
+        }
+        dialog1.show()
 
         // Create an alert builder
-        val builder = AlertDialog.Builder(requireContext()) //R.style.AlertDialogStyle)
+      /*  val builder = AlertDialog.Builder(requireContext()) //R.style.AlertDialogStyle)
 
         builder.setTitle("Modifica posizione")
 
@@ -433,7 +604,7 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
         val customLayout: View = layoutInflater.inflate(R.layout.modify_place_dialog, null)
         builder.setView(customLayout)
 
-        val name_editText = customLayout.findViewById<EditText>(R.id.editText)
+        val name_editText = customLayout.findViewById<EditText>(R.id.addplace_edittext)
 
         name_editText.setText(oldmarker.title)
 
@@ -509,7 +680,7 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
 
         dialog.setCancelable(false)
         dialog.show()
-
+*/
     }
 
 
