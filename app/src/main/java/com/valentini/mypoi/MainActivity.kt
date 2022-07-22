@@ -11,8 +11,6 @@ import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
@@ -25,13 +23,13 @@ import com.valentini.mypoi.ui.main.SectionsPagerAdapter
 
 class MainActivity : AppCompatActivity() , OnMapReadyCallback {
 
-    private val FINELOCATION_PERMISSIONCODE = 1
+    private val permissionCode = 1
     private var usePosition: Boolean = false
 
     lateinit var googleMapFragment: MapFragment
 
     lateinit var binding: ActivityMainBinding
-    lateinit var databaseHelper: DatabaseHelper
+    private lateinit var databaseHelper: DatabaseHelper
     val markerListTest = arrayListOf<Marker>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,10 +111,6 @@ class MainActivity : AppCompatActivity() , OnMapReadyCallback {
 
     }
 
-    fun getMarkersList(): ArrayList<Marker> {
-        return markerListTest
-    }
-
     fun insertMarkerInList(marker: Marker) {
         markerListTest.add(marker)
         insertInRecycleView(markerListTest.indexOf(marker))
@@ -159,14 +153,14 @@ class MainActivity : AppCompatActivity() , OnMapReadyCallback {
                 .setTitle("Permission needed")
                 .setMessage("Dai, dammi la posizione precisa")
                 .setPositiveButton("Ok") { dialog, which ->
-                    ActivityCompat.requestPermissions(this@MainActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), FINELOCATION_PERMISSIONCODE)
+                    ActivityCompat.requestPermissions(this@MainActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), permissionCode)
                 }
                 .setNegativeButton("Ok") { dialog, which ->
                     dialog.dismiss()
                 }
                 .create().show()
         } else {
-            ActivityCompat.requestPermissions(this@MainActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), FINELOCATION_PERMISSIONCODE)
+            ActivityCompat.requestPermissions(this@MainActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), permissionCode)
         }
     }
 
@@ -176,18 +170,17 @@ class MainActivity : AppCompatActivity() , OnMapReadyCallback {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        if (requestCode == FINELOCATION_PERMISSIONCODE) {
-            usePosition =
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //Toast.makeText(this@MainActivity, "Permission fine granted", Toast.LENGTH_SHORT).show()
-                    true
-                } else {
-                    //Toast.makeText(this@MainActivity, "Permesso posizione non ottenuto", Toast.LENGTH_SHORT).show()
-                    false
-                }
+        usePosition = if (requestCode == permissionCode) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //Toast.makeText(this@MainActivity, "Permission fine granted", Toast.LENGTH_SHORT).show()
+                true
+            } else {
+                //Toast.makeText(this@MainActivity, "Permesso posizione non ottenuto", Toast.LENGTH_SHORT).show()
+                false
+            }
 
         } else {
-            usePosition = false
+            false
         }
 
         createEverything(usePosition)
@@ -197,12 +190,6 @@ class MainActivity : AppCompatActivity() , OnMapReadyCallback {
     private fun goToMapTab() {
         this@MainActivity.binding.tabs.getTabAt(1)
             ?.select() //Con questa funzione faccio lo switch alla mappa ovunque io sia
-    }
-
-    fun openMapTo(position: LatLng, zoom: Float) {
-        this@MainActivity.binding.tabs.getTabAt(1)
-            ?.select()
-
     }
 
     @SuppressLint("ResourceType")

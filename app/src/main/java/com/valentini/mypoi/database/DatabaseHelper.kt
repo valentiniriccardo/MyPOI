@@ -16,7 +16,7 @@ import java.util.concurrent.Executors
 
 
 const val DATABASE_VERSION = 7
-const val DATABASE_NAME = "sqlite_dataa.db"
+const val DATABASE_NAME = "my_poi.db"
 const val TABLE_NAME = "myplaces"
 const val COL_ID = "id"
 const val COL_NAME = "name"
@@ -68,7 +68,7 @@ open class DatabaseHelper(context: Context) :
         return res.getInt(0)
     }
 
-    @SuppressLint("Range") //INDAGARE //TODO PERCHé
+    @SuppressLint("Range") //Why is this like this?
     fun markersInitList(): LinkedList<MarkerOptions> {
         val executor = Executors.newSingleThreadExecutor()
         val handler = Handler(Looper.getMainLooper())
@@ -78,27 +78,19 @@ open class DatabaseHelper(context: Context) :
         res.moveToFirst()
 
         while (!res.isAfterLast) {
-            val tempmo =
+            val markerOptionsToAdd =
                 MarkerOptions()
                     .title(res.getString(res.getColumnIndex(COL_NAME)))
-                    .position(
-                        LatLng(
+                    .position(LatLng(
                             res.getDouble(res.getColumnIndex(COL_LATITUDE)),
-                            res.getDouble(res.getColumnIndex(COL_LONGITUDE))
-                        )
-                    )
-                    .snippet(
-                        res.getString(res.getColumnIndex(COL_ID)) + "#" + res.getString(
-                            res.getColumnIndex(
-                                COL_TYPE_NAME_COLOR
-                            )
-                        )
-                    )
+                            res.getDouble(res.getColumnIndex(COL_LONGITUDE))))
+                    .snippet(res.getString(res.getColumnIndex(COL_ID)) + "#" + res.getString(
+                            res.getColumnIndex(COL_TYPE_NAME_COLOR)))
 
-            ls.add(tempmo)
-            res.moveToNext();
+            ls.add(markerOptionsToAdd)
+            res.moveToNext()
         }
-
+        res.close()
         println(COL_TYPE_NAME_COLOR)
         return ls
     }

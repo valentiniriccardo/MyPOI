@@ -28,6 +28,7 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/font/inter_bold.xml" value="0.5848958333333333" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/font/inter_light.xml" value="0.34479166666666666" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/font/inter_thin.xml" value="0.34479166666666666" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/font/jetbrains_mono_medium.xml" value="0.3458333333333333" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/layout/activity_main.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/layout/add_place_dialog.xml" value="0.315625" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/layout/custom_dialog.xml" value="0.4466666666666667" />
@@ -36,7 +37,7 @@
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/layout/item_layout.xml" value="0.5546875" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/layout/item_layout_new.xml" value="0.5546875" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/layout/map_fragment.xml" value="0.4466666666666667" />
-        <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/layout/marker_item.xml" value="0.36" />
+        <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/layout/marker_item.xml" value="0.6666666666666666" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/layout/marker_item_new.xml" value="1.0885885885885886" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/layout/modifty_place_dialog.xml" value="0.3145833333333333" />
         <entry key="..\:/Users/Administrator/AndroidStudioProjects/MyPOI/app/src/main/res/layout/modify_place_dialog.xml" value="0.5546875" />

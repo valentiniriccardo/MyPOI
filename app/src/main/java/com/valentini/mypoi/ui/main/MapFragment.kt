@@ -50,7 +50,7 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
 
     lateinit var googleMap: GoogleMap
     private lateinit var pageViewModel: PageViewModel
-    var mapFragmentBinding: MapFragmentBinding? = null
+    private var mapFragmentBinding: MapFragmentBinding? = null
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     var currentMarker: Marker? = null
     lateinit var databaseHelper: DatabaseHelper
@@ -363,12 +363,12 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
         val editText = customLayout.findViewById<EditText>(R.id.addplace_edittext)
 
         dialog1.setOnShowListener {
-            val button_neg = (dialog1 as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE)
-            button_neg.setOnClickListener {
+            val negativebutton = dialog1.getButton(AlertDialog.BUTTON_NEGATIVE)
+            negativebutton.setOnClickListener {
                 dialog1.dismiss()
             }
-            val button_pos = (dialog1 as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
-            button_pos.setOnClickListener { // TODO Do something
+            val positivebutton = dialog1.getButton(AlertDialog.BUTTON_POSITIVE)
+            positivebutton.setOnClickListener { // TODO Do something
 
 
                 //editText.isSingleLine = true
@@ -397,10 +397,10 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
                     contentValues.put(COL_LATITUDE, marker.position.latitude)
                     contentValues.put(COL_LONGITUDE, marker.position.longitude)
                     contentValues.put(COL_TYPE_NAME_COLOR, rb.tooltipText.toString())
-                    val new_id: Int = databaseHelper.insertMarker(contentValues)
-                    marker.snippet("$new_id#$color#$type")
+                    val newid: Int = databaseHelper.insertMarker(contentValues)
+                    marker.snippet("$newid#$color#$type")
 
-                    val new_marker = googleMap.addMarker(marker)
+                    val newmarker = googleMap.addMarker(marker)
                     googleMap.animateCamera(
                         CameraUpdateFactory.newLatLngZoom(
                             LatLng(
@@ -409,7 +409,7 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
                             ), 15.0f
                         ), 2000, null
                     )
-                    (activity as MainActivity).insertMarkerInList(new_marker!!)
+                    (activity as MainActivity).insertMarkerInList(newmarker!!)
                     dialog1.dismiss()
                 } else {
                     Toast.makeText(requireContext(), "Il nome non può essere vuoto", Toast.LENGTH_LONG).show()
@@ -440,17 +440,17 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
 
         val viewId = context?.resources?.getIdentifier("rb_mod_" + oldmarker.snippet!!.split("#")[2], "id", context?.packageName)
 
-        val checked_radio_button = customLayout.findViewById<RadioButton>(viewId!!)
-        checked_radio_button?.isChecked = true
+        val checkedradiobutton = customLayout.findViewById<RadioButton>(viewId!!)
+        checkedradiobutton?.isChecked = true
 
         dialog1.setOnShowListener {
-            val button_neg = (dialog1 as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE)
-            button_neg.setOnClickListener {
+            val negativebutton = dialog1.getButton(AlertDialog.BUTTON_NEGATIVE)
+            negativebutton.setOnClickListener {
                 dialog1.dismiss()
             }
 
-            val button_neu = (dialog1 as AlertDialog).getButton(AlertDialog.BUTTON_NEUTRAL)
-            button_neu.setOnClickListener {
+            val neutralbutton = dialog1.getButton(AlertDialog.BUTTON_NEUTRAL)
+            neutralbutton.setOnClickListener {
                 currentMarker?.isVisible = false
                 clicked = false
                 databaseHelper.markerRemove(currentMarker!!)
@@ -461,8 +461,8 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
 
             }
 
-            val button_pos = (dialog1 as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
-            button_pos.setOnClickListener { // TODO Do something
+            val positivebutton = dialog1.getButton(AlertDialog.BUTTON_POSITIVE)
+            positivebutton.setOnClickListener { // TODO Do something
 
 
                 //editText.isSingleLine = true
@@ -471,7 +471,7 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
                     val rb = customLayout.findViewById<RadioButton>(
                         customLayout.findViewById<RadioGroup>(options_list).checkedRadioButtonId
                     )
-                    val id_ = oldmarker.snippet!!.substringBefore("#")
+                    val oldid = oldmarker.snippet!!.substringBefore("#")
                     val color = rb.tooltipText.toString().split("#")[0]
                     val type = rb.tooltipText.toString().split("#")[1]
 
@@ -485,7 +485,7 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
                             )
                         )
                         .title(editText.text.toString())
-                        .snippet("$id_#$color#$type")
+                        .snippet("$oldid#$color#$type")
                     val contentValues = ContentValues()
                     contentValues.put(COL_NAME, markeroptions.title)
                     contentValues.put(COL_ID, markeroptions.snippet!!.substringBefore("#"))
@@ -529,12 +529,6 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
         requireContext().startActivity(intent)
     }
 
-
-    // Do something with the data
-    // coming from the AlertDialog
-    private fun sendDialogDataToActivity(data: String) {
-        ////Toast.makeText(requireContext(), data, //Toast.LENGTH_SHORT).show()
-    }
 
     override fun onInfoWindowClick(p0: Marker) {
         p0.snippet
