@@ -2,10 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:orientation="vertical"
     android:textAlignment="gravity">
-    <!--android:background="@drawable/ic_rounded_rectangle"-->
+
     <EditText
         android:id="@+id/addplace_edittext"
         android:layout_width="match_parent"
@@ -25,12 +24,8 @@
         android:digits="0123456789AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZzÁáÂâÃãÀàÇçÉéÊêÍíÓóÔôÕõÚú@òàùèé"
         />
 
-    <!--test-->
-
-    <!--test-->
-
     <View
-        android:id="@+id/divider2"
+        android:id="@+id/add_divider"
         android:layout_width="match_parent"
         android:layout_height="4dp"
         android:background="@color/teal_700" />
@@ -42,9 +37,8 @@
         android:layout_margin="16dp"
         android:fontFamily="@font/inter_light"
         android:includeFontPadding="true"
-        android:inputType="text"
         android:minHeight="48dp"
-        android:text="Tipologia"
+        android:text="@string/label_tipologia"
         android:textSize="18sp" />
 
     <ScrollView
@@ -71,7 +65,7 @@
                 android:drawableTint="@android:color/holo_blue_light"
                 android:fontFamily="@font/inter_light"
                 android:includeFontPadding="true"
-                android:text="Speciale"
+                android:text="@string/type_speciale"
                 android:textAlignment="viewStart"
                 android:tooltipText="33B5E5#speciale"
                 android:typeface="normal" />
@@ -85,7 +79,7 @@
                 android:drawableTint="@android:color/holo_green_light"
                 android:fontFamily="@font/inter_light"
                 android:includeFontPadding="true"
-                android:text="Casa"
+                android:text="@string/type_casa"
                 android:textAlignment="viewStart"
                 android:tooltipText="99CC00#casa"
                 android:typeface="normal" />
@@ -99,7 +93,7 @@
                 android:drawableTint="@android:color/holo_blue_dark"
                 android:fontFamily="@font/inter_light"
                 android:includeFontPadding="true"
-                android:text="Cibo"
+                android:text="@string/type_cibo"
                 android:textAlignment="viewStart"
                 android:tooltipText="0099CC#cibo"
                 android:typeface="normal" />
@@ -113,7 +107,7 @@
                 android:drawableTint="@android:color/holo_red_light"
                 android:fontFamily="@font/inter_light"
                 android:includeFontPadding="true"
-                android:text="Divertimento"
+                android:text="@string/type_divertimento"
                 android:textAlignment="viewStart"
                 android:tooltipText="FF4444#divertimento"
                 android:typeface="normal" />
@@ -128,7 +122,7 @@
                 android:fontFamily="@font/inter_light"
                 android:includeFontPadding="true"
                 android:minHeight="48dp"
-                android:text="Lavoro"
+                android:text="@string/type_lavoro"
                 android:textAlignment="viewStart"
                 android:tooltipText="FFBB33#lavoro"
                 android:typeface="normal" />
@@ -142,7 +136,7 @@
                 android:drawableTint="#512DA8"
                 android:fontFamily="@font/inter_light"
                 android:includeFontPadding="true"
-                android:text="Bar"
+                android:text="@string/type_bar"
                 android:textAlignment="viewStart"
                 android:tooltipText="512DA8#bar"
                 android:typeface="normal" />
@@ -156,7 +150,7 @@
                 android:drawableTint="@android:color/holo_orange_dark"
                 android:fontFamily="@font/inter_light"
                 android:includeFontPadding="true"
-                android:text="Sport"
+                android:text="@string/type_sport"
                 android:textAlignment="viewStart"
                 android:tooltipText="FF8800#sport"
                 android:typeface="normal" />

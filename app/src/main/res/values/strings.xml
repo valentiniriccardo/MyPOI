@@ -15,4 +15,12 @@
     <string name="home_image_description">globe</string>
     <string name="string_mod_tipologia">Modifica tipologia</string>
     <string name="mod_name_placeholder">Modifica nome posto</string>
+    <string name="label_tipologia">Tipologia</string>
+    <string name="type_speciale">Speciale</string>
+    <string name="type_casa">Casa</string>
+    <string name="type_cibo">Cibo</string>
+    <string name="type_divertimento">Divertimento</string>
+    <string name="type_lavoro">Lavoro</string>
+    <string name="type_bar">Bar</string>
+    <string name="type_sport">Sport</string>
 </resources>

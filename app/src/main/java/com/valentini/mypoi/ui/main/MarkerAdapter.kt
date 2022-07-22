@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.model.Marker
@@ -20,40 +19,27 @@ open class MarkerAdapter(private val context: Context, private val markerList: A
 
     class MarkerViewHolder(private val context: Context, itemView: View) : RecyclerView.ViewHolder(itemView)
     {
-
         private val markerTitleTextView: TextView = itemView.findViewById(R.id.marker_label_name)
         private val markerTypeTextView: TextView = itemView.findViewById(R.id.marker_label_type)
         private val markerLatTextView: TextView = itemView.findViewById(R.id.marker_label_latitude)
         private val markerLongTextView: TextView = itemView.findViewById(R.id.marker_label_longitude)
         private val markerIconView: ImageView = itemView.findViewById(R.id.marker_type_logo)
-        private val markerLayout: ConstraintLayout = itemView.findViewById(R.id.layoutItem)
 
         fun bind(marker: Marker)
         {
-
             val prop = marker.snippet!!.split("#")
-
             val id = prop[0] //Non utilizzato ma rende chiara la situazione
             val color = prop[1]
             val type = prop[2]
-
             val drawable = ContextCompat.getDrawable(this.context, context.resources.getIdentifier(type, "drawable", context.applicationContext.packageName))
+            val df = DecimalFormat("00.0000")
 
             markerTitleTextView.text = marker.title
             markerTypeTextView.text = type
-            val df = DecimalFormat("00.000")
             markerLatTextView.text = String.format("Lat: ${df.format(marker.position.latitude)}")
             markerLongTextView.text = String.format("Lon: ${df.format(marker.position.longitude)}")
-
-            markerLayout.setOnClickListener(){
-
-
-            }
-
             drawable!!.setColorFilter(parseColor("#$color"), PorterDuff.Mode.MULTIPLY)
             markerIconView.background = drawable
-
-
         }
     }
 
