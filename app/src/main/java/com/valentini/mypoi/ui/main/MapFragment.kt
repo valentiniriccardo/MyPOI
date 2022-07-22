@@ -52,7 +52,7 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
     private lateinit var pageViewModel: PageViewModel
     var mapFragmentBinding: MapFragmentBinding? = null
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private var currentMarker: Marker? = null
+    var currentMarker: Marker? = null
     lateinit var databaseHelper: DatabaseHelper
     private val binding get() = mapFragmentBinding!!
     private var clicked = false
@@ -360,7 +360,9 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
             .setTitle(R.string.app_name)
             .setPositiveButton(android.R.string.ok, null) //Set to null. We override the onclick
             .setNegativeButton(android.R.string.cancel, null)
+            .setCancelable(false)
             .create()
+
         val customLayout: View = layoutInflater.inflate(R.layout.add_place_dialog, null)
         dialog1.setView(customLayout)
         val editText = customLayout.findViewById<EditText>(R.id.addplace_edittext)
@@ -512,6 +514,7 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
             .setPositiveButton(android.R.string.ok, null) //Set to null. We override the onclick
             .setNegativeButton(android.R.string.cancel, null)
             .setNeutralButton("Elimina", null)
+            .setCancelable(false)
             .create()
         val customLayout: View = layoutInflater.inflate(R.layout.modify_place_dialog, null)
         dialog1.setView(customLayout)
@@ -540,6 +543,7 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
                 currentMarker!!.remove()
                 setNullAndHide()
                 dialog1.dismiss()
+
             }
 
             val button_pos = (dialog1 as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
@@ -583,7 +587,7 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
                             LatLng(
                                 newmarker.position.latitude,
                                 newmarker.position.longitude
-                            ), 16.0f
+                            ), 15f
                         ), 1000, null
                     )
                     dialog1.dismiss()
@@ -708,7 +712,7 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
         p0.snippet
     }
 
-    private fun setNullAndHide() {
+    fun setNullAndHide() {
         currentMarker = null
         mapFragmentBinding!!.gotoFab.hide()
     }
