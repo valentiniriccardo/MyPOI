@@ -23,4 +23,6 @@
     <string name="type_lavoro">Lavoro</string>
     <string name="type_bar">Bar</string>
     <string name="type_sport">Sport</string>
+    <string name="positiongranted">Posizione autorizzata</string>
+    <string name="positionnotgranted">Posizione non autorizzata</string>
 </resources>
