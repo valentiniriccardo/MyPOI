@@ -437,7 +437,6 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
         editText.setText(oldmarker.title)
 
         val id = this.resources.getIdentifier("R.id.rb_mod_" + oldmarker.snippet!!.split("#")[2], "id", requireActivity().packageName)
-
         val viewId = context?.resources?.getIdentifier("rb_mod_" + oldmarker.snippet!!.split("#")[2], "id", context?.packageName)
 
         val checkedradiobutton = customLayout.findViewById<RadioButton>(viewId!!)
@@ -450,6 +449,7 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
             }
 
             val neutralbutton = dialog1.getButton(AlertDialog.BUTTON_NEUTRAL)
+            neutralbutton.setTextColor(Color.parseColor("#A42821"))
             neutralbutton.setOnClickListener {
                 currentMarker?.isVisible = false
                 clicked = false
@@ -464,57 +464,55 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
             val positivebutton = dialog1.getButton(AlertDialog.BUTTON_POSITIVE)
             positivebutton.setOnClickListener { // TODO Do something
 
+            if (editText.text.toString() != "")
+            {
+                val rb = customLayout.findViewById<RadioButton>(
+                    customLayout.findViewById<RadioGroup>(options_list).checkedRadioButtonId
+                )
+                val oldid = oldmarker.snippet!!.substringBefore("#")
+                val color = rb.tooltipText.toString().split("#")[0]
+                val type = rb.tooltipText.toString().split("#")[1]
 
-                //editText.isSingleLine = true
-
-                if (editText.text.toString() != "") {
-                    val rb = customLayout.findViewById<RadioButton>(
-                        customLayout.findViewById<RadioGroup>(options_list).checkedRadioButtonId
-                    )
-                    val oldid = oldmarker.snippet!!.substringBefore("#")
-                    val color = rb.tooltipText.toString().split("#")[0]
-                    val type = rb.tooltipText.toString().split("#")[1]
-
-                    oldmarker.isVisible = false
-                    val markeroptions = MarkerOptions().position(LatLng(oldmarker.position.latitude, oldmarker.position.longitude))
-                        .icon(
-                            bitmapDescriptorFromVector(
-                                resources.getIdentifier(
-                                    type, "drawable", requireActivity().applicationContext.packageName
-                                ), Color.parseColor("#$color")
-                            )
+                oldmarker.isVisible = false
+                val markeroptions = MarkerOptions().position(LatLng(oldmarker.position.latitude, oldmarker.position.longitude))
+                    .icon(
+                        bitmapDescriptorFromVector(
+                            resources.getIdentifier(
+                                type, "drawable", requireActivity().applicationContext.packageName
+                            ), Color.parseColor("#$color")
                         )
-                        .title(editText.text.toString())
-                        .snippet("$oldid#$color#$type")
-                    val contentValues = ContentValues()
-                    contentValues.put(COL_NAME, markeroptions.title)
-                    contentValues.put(COL_ID, markeroptions.snippet!!.substringBefore("#"))
-                    contentValues.put(COL_TYPE_NAME_COLOR, rb.tooltipText.toString()) //todo test
-                    ////Toast.makeText(requireContext(), "Testo: " + rb.tooltipText.toString().substringAfter("#"), //Toast.LENGTH_SHORT).show()
-                    val newmarker = googleMap.addMarker(markeroptions)
-                    databaseHelper.markerDataUpdate(newmarker!!)
-
-                    (activity as MainActivity).updateMarkerInList(oldmarker, newmarker)
-                    oldmarker.remove()
-
-                    googleMap.animateCamera(
-                        CameraUpdateFactory.newLatLngZoom(
-                            LatLng(
-                                newmarker.position.latitude,
-                                newmarker.position.longitude
-                            ), 15f
-                        ), 1000, null
                     )
-                    dialog1.dismiss()
-                } else {
-                    Toast.makeText(requireContext(), "Il nome non può essere vuoto", Toast.LENGTH_LONG).show()
-                }
-            }
+                    .title(editText.text.toString())
+                    .snippet("$oldid#$color#$type")
+                val contentValues = ContentValues()
+                contentValues.put(COL_NAME, markeroptions.title)
+                contentValues.put(COL_ID, markeroptions.snippet!!.substringBefore("#"))
+                contentValues.put(COL_TYPE_NAME_COLOR, rb.tooltipText.toString()) //todo test
+                ////Toast.makeText(requireContext(), "Testo: " + rb.tooltipText.toString().substringAfter("#"), //Toast.LENGTH_SHORT).show()
+                val newmarker = googleMap.addMarker(markeroptions)
+                databaseHelper.markerDataUpdate(newmarker!!)
 
+                (activity as MainActivity).updateMarkerInList(oldmarker, newmarker)
+                oldmarker.remove()
+
+                googleMap.animateCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        LatLng(
+                            newmarker.position.latitude,
+                            newmarker.position.longitude
+                        ), 15f
+                    ), 1000, null
+                )
+                dialog1.dismiss()
+                }
+            else
+            {
+                Toast.makeText(requireContext(), "Il nome non può essere vuoto", Toast.LENGTH_LONG).show()
+            }
+            }
         }
         dialog1.show()
     }
-
 
     private fun getMeToMarker(marker: Marker) {
 
