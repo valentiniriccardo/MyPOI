@@ -10,7 +10,7 @@
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
@@ -99,7 +99,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/description_label"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/cropped_background" />
+        app:srcCompat="@drawable/cropped_background_new" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

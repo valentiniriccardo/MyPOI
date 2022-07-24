@@ -77,8 +77,6 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.executePendingTransactions() //FONDAMENTALE
         } catch (ex: RuntimeException)
         {}
-
-
         if (myFragment.isVisible) {
             myFragment.removeFromRecycleView(markerIndex)
         }
@@ -95,14 +93,12 @@ class MainActivity : AppCompatActivity() {
                 .add(R.id.constraintlayout, myFragment)
                 .commitNowAllowingStateLoss()
             supportFragmentManager.executePendingTransactions() //FONDAMENTALE
-        } catch (ex: RuntimeException) {
-
-        }
-
-        if (myFragment.isAdded) {
+        } catch (ex: RuntimeException)
+        {}
+        if (myFragment.isAdded)
+        {
             myFragment.updateInRecycleView(markerIndex)
         }
-
     }
 
     fun insertMarkerInList(marker: Marker) {
@@ -147,10 +143,10 @@ class MainActivity : AppCompatActivity() {
             AlertDialog.Builder(this)
                 .setTitle("Permission needed")
                 .setMessage("Dai, dammi la posizione precisa")
-                .setPositiveButton("Ok") { dialog, which ->
+                .setPositiveButton("Ok") { _, _ ->
                     ActivityCompat.requestPermissions(this@MainActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), permissionCode)
                 }
-                .setNegativeButton("Ok") { dialog, which ->
+                .setNegativeButton("Ok") { dialog, _ ->
                     dialog.dismiss()
                 }
                 .create().show()
@@ -196,7 +192,8 @@ class MainActivity : AppCompatActivity() {
         createEverything(usePosition)
     }
 
-    private fun goToMapTab() {
+    private fun goToMapTab()
+    {
         this@MainActivity.binding.tabs.getTabAt(1)
             ?.select() //Con questa funzione faccio lo switch alla mappa ovunque io sia
     }
