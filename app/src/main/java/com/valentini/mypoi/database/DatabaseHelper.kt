@@ -6,13 +6,10 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.os.Handler
-import android.os.Looper
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import java.util.*
-import java.util.concurrent.Executors
 
 
 const val DATABASE_VERSION = 7
@@ -70,8 +67,8 @@ open class DatabaseHelper(context: Context) :
 
     @SuppressLint("Range") //Why is this like this?
     fun markersInitList(): LinkedList<MarkerOptions> {
-        val executor = Executors.newSingleThreadExecutor()
-        val handler = Handler(Looper.getMainLooper())
+        //val executor = Executors.newSingleThreadExecutor()
+        //val handler = Handler(Looper.getMainLooper())
         val ls = LinkedList<MarkerOptions>()
         db = this.readableDatabase
         val res: Cursor = db.rawQuery("SELECT * FROM $TABLE_NAME", null)

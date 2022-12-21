@@ -1,18 +1,14 @@
 package com.valentini.mypoi
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.provider.Settings
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.Marker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
@@ -35,8 +31,8 @@ class MainActivity : AppCompatActivity() {
     val markerListTest = arrayListOf<Marker>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val id: String = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
-        Toast.makeText(this@MainActivity.baseContext, id, Toast.LENGTH_LONG).show()
+        //val id: String = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+        //Toast.makeText(this@MainActivity.baseContext, id, Toast.LENGTH_LONG).show()
         super.onCreate(savedInstanceState)
 
         if (ContextCompat.checkSelfPermission(this@MainActivity.baseContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -56,7 +52,7 @@ class MainActivity : AppCompatActivity() {
                 .add(R.id.constraintlayout, myFragment)
                 .commitNowAllowingStateLoss()
             supportFragmentManager.executePendingTransactions() //FONDAMENTALE
-        } catch (ex: RuntimeException)
+        } catch (_: RuntimeException)
         {}
 
         if (myFragment.isVisible) //Se non è stato ancora creato, mi evito l'eccezione NullPointerException
@@ -75,7 +71,7 @@ class MainActivity : AppCompatActivity() {
                 .add(R.id.constraintlayout, myFragment)
                 .commitNowAllowingStateLoss()
             supportFragmentManager.executePendingTransactions() //FONDAMENTALE
-        } catch (ex: RuntimeException)
+        } catch (_: RuntimeException)
         {}
         if (myFragment.isVisible) {
             myFragment.removeFromRecycleView(markerIndex)
@@ -93,7 +89,7 @@ class MainActivity : AppCompatActivity() {
                 .add(R.id.constraintlayout, myFragment)
                 .commitNowAllowingStateLoss()
             supportFragmentManager.executePendingTransactions() //FONDAMENTALE
-        } catch (ex: RuntimeException)
+        } catch (_: RuntimeException)
         {}
         if (myFragment.isAdded)
         {
