@@ -142,9 +142,6 @@ class MainActivity : AppCompatActivity() {
                 .setPositiveButton("Ok") { _, _ ->
                     ActivityCompat.requestPermissions(this@MainActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), permissionCode)
                 }
-                .setNegativeButton("Ok") { dialog, _ ->
-                    dialog.dismiss()
-                }
                 .create().show()
         } else {
             ActivityCompat.requestPermissions(this@MainActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), permissionCode)

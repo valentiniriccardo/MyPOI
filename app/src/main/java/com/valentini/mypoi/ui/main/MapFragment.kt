@@ -237,6 +237,8 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
             }
         }
 
+        (activity as MainActivity).googleMapFragment = this@MapFragment //fix crash se posizione negata
+
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -248,6 +250,8 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
             //Ho già chiesto il permesso, se non accetta l'applicazione funzionerà in modalità senza tracciamento
             return
         }
+
+
 
         this.googleMap.setOnMarkerClickListener {
             if (currentMarker != it) {
@@ -264,6 +268,8 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
         this.googleMap.uiSettings.isMyLocationButtonEnabled = false
         this.googleMap.uiSettings.isIndoorLevelPickerEnabled = true
         this.googleMap.uiSettings.isMapToolbarEnabled = false
+
+
 
         this.googleMap.setOnMapClickListener {
 
@@ -290,7 +296,7 @@ class MapFragment(private val canUsePositionPermission: Boolean) : OnMapReadyCal
             getMeToMarker(currentMarker!!)
         }
 
-        (activity as MainActivity).googleMapFragment = this@MapFragment
+        //(activity as MainActivity).googleMapFragment = this@MapFragment //POSIZIONE ORIGINALE
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         if (ActivityCompat.checkSelfPermission(

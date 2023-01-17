@@ -52,6 +52,7 @@ open class MyPlacesFragment : Fragment() {
                 if (childView != null && gestureDetector.onTouchEvent(motionEvent)) {
                     val lat = childView.findViewById<TextView>(R.id.marker_label_latitude).text.toString().split(" ")[1].replace(",", ".").toDouble()
                     val long = childView.findViewById<TextView>(R.id.marker_label_longitude).text.toString().split(" ")[1].replace(",", ".").toDouble()
+
                     (context as MainActivity).googleMapFragment.currentMarker?.hideInfoWindow()
                     (context as MainActivity).googleMapFragment.setNullAndHide()
                     (context as MainActivity).googleMapFragment.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lat, long), 15f))
